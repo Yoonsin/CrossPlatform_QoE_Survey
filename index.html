@@ -225,6 +225,38 @@
     .score-num { font-size: 1.1rem; font-weight: 700; color: #4a5568; }
     .score-text { font-size: 0.6rem; font-weight: 500; color: #718096; text-align: center; line-height: 1.3; }
 
+    /* 자유 의견 */
+    .comment-block {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .comment-block label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #718096;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .comment-block textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #2d3748;
+      background: #fff;
+      resize: vertical;
+      min-height: 72px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .comment-block textarea:focus { border-color: #667eea; }
+    .comment-block textarea::placeholder { color: #a0aec0; }
+
     /* 세그먼트 추가 버튼 */
     .add-segment-btn {
       display: flex;
@@ -360,7 +392,7 @@
 </div>
 
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwigfNa_lc_jeYkHNMqVZrnML5kGbbu4jQWg79-1ZYYKVZNhkIPJOriyqa8xaTT8hf-KA/exec";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmMFThoYEJ_k0qESDcPI6MVHtQ9zyPo5k2dGMNj2UYDocmzYc-fWWv5f-WZsigrriEmQ/exec";
   const MAX_SEGMENTS = 6;
 
   const QUESTIONS = [
@@ -451,6 +483,11 @@
           </div>
         </div>
       `).join("")}
+
+      <div class="comment-block">
+        <label for="seg${id}_comment">자유 의견 (선택)</label>
+        <textarea id="seg${id}_comment" name="seg${id}_comment" placeholder="이 세그먼트에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+      </div>
     `;
 
     card.querySelector(".remove-btn").addEventListener("click", () => {
@@ -536,6 +573,7 @@
         const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
       }
+      entry.comment = (card.querySelector(`textarea[name="seg${id}_comment"]`).value || "").trim();
       records.push(entry);
     }
 
