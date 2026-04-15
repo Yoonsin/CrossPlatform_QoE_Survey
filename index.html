@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QoE 설문조사</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      max-width: 680px;
+      width: 100%;
+      padding: 40px 48px;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .card-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 8px;
+    }
+
+    .card-header p {
+      font-size: 0.95rem;
+      color: #718096;
+    }
+
+    /* ID 입력 */
+    .id-section {
+      margin-bottom: 32px;
+    }
+
+    .id-section label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 8px;
+    }
+
+    .id-section input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #2d3748;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .id-section input:focus {
+      border-color: #667eea;
+    }
+
+    /* 구분선 */
+    .divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 32px 0;
+    }
+
+    /* 질문 카드 */
+    .question-block {
+      margin-bottom: 32px;
+    }
+
+    .question-block:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .question-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    .question-num {
+      display: inline-block;
+      background: #667eea;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 2px 8px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    /* 리커트 스케일 */
+    .likert {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .likert-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .likert-option input[type="radio"] {
+      display: none;
+    }
+
+    .likert-option label {
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 4px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .likert-option label:hover {
+      border-color: #a3bffa;
+      background: #ebf4ff;
+    }
+
+    .likert-option input[type="radio"]:checked + label {
+      border-color: #667eea;
+      background: #667eea;
+      color: #fff;
+    }
+
+    .likert-option input[type="radio"]:checked + label .score-num {
+      color: #fff;
+    }
+
+    .likert-option input[type="radio"]:checked + label .score-text {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .score-num {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #4a5568;
+    }
+
+    .score-text {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #718096;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* 제출 버튼 */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 36px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.92;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+
+    .submit-btn:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    /* 완료 메시지 */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 24px 0 8px;
+    }
+
+    .success-msg .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .success-msg h2 {
+      font-size: 1.3rem;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .success-msg p {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .error-msg {
+      display: none;
+      text-align: center;
+      color: #e53e3e;
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .card {
+        padding: 28px 20px;
+      }
+
+      .likert {
+        gap: 4px;
+      }
+
+      .score-text {
+        font-size: 0.58rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <h1>QoE 설문조사</h1>
+    <p>각 항목에 대해 본인의 생각과 가장 가까운 점수를 선택해 주세요.</p>
+  </div>
+
+  <form id="surveyForm">
+    <!-- 참가자 ID -->
+    <div class="id-section">
+      <label for="userId">참가자 ID</label>
+      <input type="text" id="userId" placeholder="예: P001" autocomplete="off" required />
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q1 -->
+    <div class="question-block">
+      <div class="question-label">
+        <span class="question-num">Q1</span>
+        게임이 느리거나 부자연스럽게 느껴졌다
+      </div>
+      <div class="likert" id="q1">
+        <div class="likert-option">
+          <input type="radio" name="q1" id="q1-1" value="1" required />
+          <label for="q1-1">
+            <span class="score-num">1</span>
+            <span class="score-text">전혀<br>그렇지 않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q1" id="q1-2" value="2" />
+          <label for="q1-2">
+            <span class="score-num">2</span>
+            <span class="score-text">그렇지<br>않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q1" id="q1-3" value="3" />
+          <label for="q1-3">
+            <span class="score-num">3</span>
+            <span class="score-text">보통<br>이다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q1" id="q1-4" value="4" />
+          <label for="q1-4">
+            <span class="score-num">4</span>
+            <span class="score-text">그렇다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q1" id="q1-5" value="5" />
+          <label for="q1-5">
+            <span class="score-num">5</span>
+            <span class="score-text">매우<br>그렇다</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block">
+      <div class="question-label">
+        <span class="question-num">Q2</span>
+        상대가 나보다 유리한 환경이라고 느꼈다
+      </div>
+      <div class="likert" id="q2">
+        <div class="likert-option">
+          <input type="radio" name="q2" id="q2-1" value="1" required />
+          <label for="q2-1">
+            <span class="score-num">1</span>
+            <span class="score-text">전혀<br>그렇지 않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q2" id="q2-2" value="2" />
+          <label for="q2-2">
+            <span class="score-num">2</span>
+            <span class="score-text">그렇지<br>않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q2" id="q2-3" value="3" />
+          <label for="q2-3">
+            <span class="score-num">3</span>
+            <span class="score-text">보통<br>이다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q2" id="q2-4" value="4" />
+          <label for="q2-4">
+            <span class="score-num">4</span>
+            <span class="score-text">그렇다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q2" id="q2-5" value="5" />
+          <label for="q2-5">
+            <span class="score-num">5</span>
+            <span class="score-text">매우<br>그렇다</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block">
+      <div class="question-label">
+        <span class="question-num">Q3</span>
+        결과가 내 실력에 비해 잘 안 나온 것 같다고 느꼈다
+      </div>
+      <div class="likert" id="q3">
+        <div class="likert-option">
+          <input type="radio" name="q3" id="q3-1" value="1" required />
+          <label for="q3-1">
+            <span class="score-num">1</span>
+            <span class="score-text">전혀<br>그렇지 않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q3" id="q3-2" value="2" />
+          <label for="q3-2">
+            <span class="score-num">2</span>
+            <span class="score-text">그렇지<br>않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q3" id="q3-3" value="3" />
+          <label for="q3-3">
+            <span class="score-num">3</span>
+            <span class="score-text">보통<br>이다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q3" id="q3-4" value="4" />
+          <label for="q3-4">
+            <span class="score-num">4</span>
+            <span class="score-text">그렇다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q3" id="q3-5" value="5" />
+          <label for="q3-5">
+            <span class="score-num">5</span>
+            <span class="score-text">매우<br>그렇다</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block">
+      <div class="question-label">
+        <span class="question-num">Q4</span>
+        목표 달성에 본인이 충분히 기여했다고 느꼈다
+      </div>
+      <div class="likert" id="q4">
+        <div class="likert-option">
+          <input type="radio" name="q4" id="q4-1" value="1" required />
+          <label for="q4-1">
+            <span class="score-num">1</span>
+            <span class="score-text">전혀<br>그렇지 않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q4" id="q4-2" value="2" />
+          <label for="q4-2">
+            <span class="score-num">2</span>
+            <span class="score-text">그렇지<br>않다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q4" id="q4-3" value="3" />
+          <label for="q4-3">
+            <span class="score-num">3</span>
+            <span class="score-text">보통<br>이다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q4" id="q4-4" value="4" />
+          <label for="q4-4">
+            <span class="score-num">4</span>
+            <span class="score-text">그렇다</span>
+          </label>
+        </div>
+        <div class="likert-option">
+          <input type="radio" name="q4" id="q4-5" value="5" />
+          <label for="q4-5">
+            <span class="score-num">5</span>
+            <span class="score-text">매우<br>그렇다</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">제출하기</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </form>
+
+  <!-- 완료 메시지 -->
+  <div class="success-msg" id="successMsg">
+    <div class="icon">✅</div>
+    <h2>설문이 완료되었습니다!</h2>
+    <p>참여해 주셔서 감사합니다.</p>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // Google Apps Script 웹앱 URL을 아래에 붙여넣으세요
+  // (README.md 의 설정 가이드 참고)
+  // ============================================================
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqrDu2Jmt7tOM9CCkb9AC6KOBkAjUtN9Ce3BR7r3BehyePwrQyfuGOjte5j132_D2xeA/exec";
+
+  const form = document.getElementById("surveyForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const successMsg = document.getElementById("successMsg");
+  const errorMsg = document.getElementById("errorMsg");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const userId = document.getElementById("userId").value.trim();
+    if (!userId) {
+      showError("참가자 ID를 입력해 주세요.");
+      return;
+    }
+
+    const q1 = form.q1.value;
+    const q2 = form.q2.value;
+    const q3 = form.q3.value;
+    const q4 = form.q4.value;
+
+    if (!q1 || !q2 || !q3 || !q4) {
+      showError("모든 문항에 응답해 주세요.");
+      return;
+    }
+
+    hideError();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "제출 중...";
+
+    const payload = {
+      userId,
+      q1: parseInt(q1),
+      q2: parseInt(q2),
+      q3: parseInt(q3),
+      q4: parseInt(q4),
+      timestamp: new Date().toISOString(),
+    };
+
+    // Apps Script URL이 설정되지 않은 경우 로컬 저장만 수행
+    if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+      saveLocally(payload);
+      showSuccess();
+      return;
+    }
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      saveLocally(payload);
+      showSuccess();
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "제출하기";
+      showError("제출 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  });
+
+  function saveLocally(data) {
+    const key = "qoe_responses";
+    const existing = JSON.parse(localStorage.getItem(key) || "[]");
+    existing.push(data);
+    localStorage.setItem(key, JSON.stringify(existing));
+  }
+
+  function showSuccess() {
+    form.style.display = "none";
+    successMsg.style.display = "block";
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.style.display = "block";
+  }
+
+  function hideError() {
+    errorMsg.style.display = "none";
+  }
+</script>
+</body>
+</html>
