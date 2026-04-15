@@ -5,27 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QoE 설문조사</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
       background: #f0f4f8;
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 24px;
+      padding: 32px 24px;
     }
 
     .card {
-      background: #ffffff;
+      background: #fff;
       border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-      max-width: 680px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      max-width: 720px;
       width: 100%;
       padding: 40px 48px;
     }
@@ -47,11 +43,8 @@
       color: #718096;
     }
 
-    /* ID 입력 */
-    .id-section {
-      margin-bottom: 32px;
-    }
-
+    /* 참가자 ID */
+    .id-section { margin-bottom: 28px; }
     .id-section label {
       display: block;
       font-size: 0.9rem;
@@ -59,133 +52,126 @@
       color: #4a5568;
       margin-bottom: 8px;
     }
-
     .id-section input {
       width: 100%;
-      padding: 12px 16px;
+      padding: 11px 16px;
       border: 2px solid #e2e8f0;
       border-radius: 10px;
       font-size: 1rem;
       color: #2d3748;
-      transition: border-color 0.2s;
       outline: none;
+      transition: border-color 0.2s;
+    }
+    .id-section input:focus { border-color: #667eea; }
+
+    /* 구분선 */
+    .divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 28px 0;
     }
 
-    .id-section input:focus {
-      border-color: #667eea;
+    /* 세그먼트 카드 */
+    .segment-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
     }
 
-    /* 시나리오 / 단계 선택 */
-    .stage-section {
-      margin-bottom: 32px;
-    }
-
-    .stage-section .stage-row {
+    .segment-card-header {
       display: flex;
-      gap: 24px;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
 
-    .stage-group {
-      flex: 1;
+    .segment-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2d3748;
     }
 
-    .stage-group .stage-label {
+    .segment-title .seg-index {
+      display: inline-block;
+      background: #667eea;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 2px 9px;
+      margin-right: 8px;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #a0aec0;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+    }
+    .remove-btn:hover { background: #fed7d7; color: #c53030; }
+
+    /* 세그먼트 내 선택기 행 */
+    .seg-selectors {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .seg-group { flex: 1; }
+
+    .seg-group-label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      color: #4a5568;
-      margin-bottom: 10px;
+      color: #718096;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .seg-control {
       display: flex;
       border: 2px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 9px;
       overflow: hidden;
+      background: #fff;
     }
 
-    .seg-control input[type="radio"] {
-      display: none;
-    }
+    .seg-control input[type="radio"] { display: none; }
 
     .seg-control label {
       flex: 1;
       text-align: center;
-      padding: 10px 6px;
-      font-size: 0.9rem;
+      padding: 9px 4px;
+      font-size: 0.88rem;
       font-weight: 500;
       color: #718096;
       cursor: pointer;
       border-right: 1px solid #e2e8f0;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.12s, color 0.12s;
       user-select: none;
     }
-
-    .seg-control label:last-of-type {
-      border-right: none;
-    }
-
+    .seg-control label:last-of-type { border-right: none; }
     .seg-control input[type="radio"]:checked + label {
       background: #667eea;
       color: #fff;
       font-weight: 700;
     }
 
-    .stage-badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      background: #ebf4ff;
-      color: #4c6ef5;
-      display: none;
-    }
-
-    /* 구분선 */
-    .divider {
-      border: none;
-      border-top: 1px solid #e2e8f0;
-      margin: 32px 0;
-    }
-
-    /* 섹션 헤더 */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .section-badge {
-      display: inline-block;
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      background: #667eea;
-      color: #fff;
-    }
-
-    .section-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #4a5568;
-    }
-
-    /* 질문 카드 */
-    .question-block {
-      margin-bottom: 32px;
-    }
-
-    .question-block:last-of-type {
-      margin-bottom: 0;
-    }
+    /* 질문 블록 */
+    .question-block { margin-bottom: 20px; }
+    .question-block:last-of-type { margin-bottom: 0; }
 
     .question-label {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #2d3748;
       margin-bottom: 4px;
@@ -194,34 +180,24 @@
 
     .question-num {
       display: inline-block;
-      background: #667eea;
+      background: #4a5568;
       color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      border-radius: 6px;
-      padding: 2px 8px;
-      margin-right: 8px;
+      border-radius: 5px;
+      padding: 1px 7px;
+      margin-right: 7px;
       vertical-align: middle;
     }
 
-    /* 리커트 스케일 */
     .likert {
       display: flex;
-      gap: 8px;
-      margin-top: 16px;
+      gap: 6px;
+      margin-top: 12px;
     }
 
-    .likert-option {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .likert-option input[type="radio"] {
-      display: none;
-    }
+    .likert-option { flex: 1; }
+    .likert-option input[type="radio"] { display: none; }
 
     .likert-option label {
       cursor: pointer;
@@ -229,46 +205,46 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 12px 4px;
+      gap: 5px;
+      padding: 10px 4px;
       border: 2px solid #e2e8f0;
-      border-radius: 10px;
-      transition: all 0.15s ease;
+      border-radius: 9px;
+      background: #fff;
+      transition: all 0.12s ease;
       user-select: none;
     }
-
-    .likert-option label:hover {
-      border-color: #a3bffa;
-      background: #ebf4ff;
-    }
-
+    .likert-option label:hover { border-color: #a3bffa; background: #ebf4ff; }
     .likert-option input[type="radio"]:checked + label {
       border-color: #667eea;
       background: #667eea;
       color: #fff;
     }
+    .likert-option input[type="radio"]:checked + label .score-num { color: #fff; }
+    .likert-option input[type="radio"]:checked + label .score-text { color: rgba(255,255,255,0.85); }
 
-    .likert-option input[type="radio"]:checked + label .score-num {
-      color: #fff;
-    }
+    .score-num { font-size: 1.1rem; font-weight: 700; color: #4a5568; }
+    .score-text { font-size: 0.6rem; font-weight: 500; color: #718096; text-align: center; line-height: 1.3; }
 
-    .likert-option input[type="radio"]:checked + label .score-text {
-      color: rgba(255,255,255,0.9);
+    /* 세그먼트 추가 버튼 */
+    .add-segment-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 28px;
+      background: #fff;
+      border: 2px dashed #c3d0e8;
+      border-radius: 12px;
+      color: #667eea;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
-
-    .score-num {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #4a5568;
-    }
-
-    .score-text {
-      font-size: 0.65rem;
-      font-weight: 500;
-      color: #718096;
-      text-align: center;
-      line-height: 1.3;
-    }
+    .add-segment-btn:hover { background: #ebf4ff; border-color: #667eea; }
+    .add-segment-btn:disabled { color: #a0aec0; border-color: #e2e8f0; cursor: not-allowed; background: #fff; }
 
     /* 경고 배너 */
     .warn-banner {
@@ -277,17 +253,11 @@
       border: 1px solid #f6e05e;
       border-radius: 10px;
       padding: 12px 16px;
-      margin-top: 20px;
+      margin-bottom: 16px;
       font-size: 0.88rem;
       color: #744210;
     }
-
-    .warn-banner .warn-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
+    .warn-actions { display: flex; gap: 10px; margin-top: 10px; }
     .warn-actions button {
       padding: 6px 16px;
       border-radius: 8px;
@@ -296,23 +266,14 @@
       font-weight: 600;
       cursor: pointer;
     }
-
-    .warn-confirm-btn {
-      background: #667eea;
-      color: #fff;
-    }
-
-    .warn-cancel-btn {
-      background: #e2e8f0;
-      color: #4a5568;
-    }
+    .warn-confirm-btn { background: #667eea; color: #fff; }
+    .warn-cancel-btn { background: #e2e8f0; color: #4a5568; }
 
     /* 제출 버튼 */
     .submit-btn {
       display: block;
       width: 100%;
       padding: 14px;
-      margin-top: 36px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
       font-size: 1rem;
@@ -322,42 +283,9 @@
       cursor: pointer;
       transition: opacity 0.2s, transform 0.1s;
     }
-
-    .submit-btn:hover {
-      opacity: 0.92;
-    }
-
-    .submit-btn:active {
-      transform: scale(0.99);
-    }
-
-    .submit-btn:disabled {
-      background: #a0aec0;
-      cursor: not-allowed;
-    }
-
-    /* 완료 메시지 */
-    .success-msg {
-      display: none;
-      text-align: center;
-      padding: 24px 0 8px;
-    }
-
-    .success-msg .icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
-    }
-
-    .success-msg h2 {
-      font-size: 1.3rem;
-      color: #2d3748;
-      margin-bottom: 8px;
-    }
-
-    .success-msg p {
-      color: #718096;
-      font-size: 0.95rem;
-    }
+    .submit-btn:hover { opacity: 0.92; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; }
 
     .error-msg {
       display: none;
@@ -367,23 +295,22 @@
       margin-top: 12px;
     }
 
-    @media (max-width: 520px) {
-      .card {
-        padding: 28px 20px;
-      }
+    /* 완료 메시지 */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 24px 0 8px;
+    }
+    .success-msg .icon { font-size: 3rem; margin-bottom: 12px; }
+    .success-msg h2 { font-size: 1.3rem; color: #2d3748; margin-bottom: 8px; }
+    .success-msg p { color: #718096; font-size: 0.95rem; }
 
-      .likert {
-        gap: 4px;
-      }
-
-      .score-text {
-        font-size: 0.58rem;
-      }
-
-      .stage-section .stage-row {
-        flex-direction: column;
-        gap: 16px;
-      }
+    @media (max-width: 540px) {
+      .card { padding: 28px 16px; }
+      .segment-card { padding: 18px 16px; }
+      .seg-selectors { flex-direction: column; gap: 14px; }
+      .likert { gap: 4px; }
+      .score-text { font-size: 0.55rem; }
     }
   </style>
 </head>
@@ -402,225 +329,19 @@
       <input type="text" id="userId" placeholder="예: P001" autocomplete="off" />
     </div>
 
-    <!-- 시나리오 / 단계 선택 -->
-    <div class="stage-section">
-      <div class="stage-row">
-        <!-- 시나리오 선택 -->
-        <div class="stage-group">
-          <span class="stage-label">시나리오</span>
-          <div class="seg-control">
-            <input type="radio" name="scenario" id="sc1" value="1" />
-            <label for="sc1">1</label>
-            <input type="radio" name="scenario" id="sc2" value="2" />
-            <label for="sc2">2</label>
-            <input type="radio" name="scenario" id="sc3" value="3" />
-            <label for="sc3">3</label>
-          </div>
-        </div>
-        <!-- 단계 선택 -->
-        <div class="stage-group">
-          <span class="stage-label">단계</span>
-          <div class="seg-control">
-            <input type="radio" name="stage" id="st-before" value="적용 전" />
-            <label for="st-before">적용 전</label>
-            <input type="radio" name="stage" id="st-after" value="적용 후" />
-            <label for="st-after">적용 후</label>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <hr class="divider" />
 
-    <!-- 섹션 헤더 -->
-    <div class="section-header">
-      <span class="section-badge" id="currentStageLabel">설문 문항</span>
-      <span class="section-title">아래 문항에 응답해 주세요</span>
-    </div>
+    <!-- 세그먼트 목록 -->
+    <div id="segmentList"></div>
 
-    <!-- Q1 -->
-    <div class="question-block">
-      <div class="question-label">
-        <span class="question-num">Q1</span>
-        게임이 느리거나 부자연스럽게 느껴졌다
-      </div>
-      <div class="likert" id="q1">
-        <div class="likert-option">
-          <input type="radio" name="q1" id="q1-1" value="1" />
-          <label for="q1-1">
-            <span class="score-num">1</span>
-            <span class="score-text">전혀<br>그렇지 않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q1" id="q1-2" value="2" />
-          <label for="q1-2">
-            <span class="score-num">2</span>
-            <span class="score-text">그렇지<br>않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q1" id="q1-3" value="3" />
-          <label for="q1-3">
-            <span class="score-num">3</span>
-            <span class="score-text">보통<br>이다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q1" id="q1-4" value="4" />
-          <label for="q1-4">
-            <span class="score-num">4</span>
-            <span class="score-text">그렇다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q1" id="q1-5" value="5" />
-          <label for="q1-5">
-            <span class="score-num">5</span>
-            <span class="score-text">매우<br>그렇다</span>
-          </label>
-        </div>
-      </div>
-    </div>
+    <!-- 세그먼트 추가 버튼 -->
+    <button type="button" class="add-segment-btn" id="addSegmentBtn">
+      + 세그먼트 추가
+    </button>
 
-    <!-- Q2 -->
-    <div class="question-block">
-      <div class="question-label">
-        <span class="question-num">Q2</span>
-        상대가 나보다 유리한 환경이라고 느꼈다
-      </div>
-      <div class="likert" id="q2">
-        <div class="likert-option">
-          <input type="radio" name="q2" id="q2-1" value="1" />
-          <label for="q2-1">
-            <span class="score-num">1</span>
-            <span class="score-text">전혀<br>그렇지 않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q2" id="q2-2" value="2" />
-          <label for="q2-2">
-            <span class="score-num">2</span>
-            <span class="score-text">그렇지<br>않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q2" id="q2-3" value="3" />
-          <label for="q2-3">
-            <span class="score-num">3</span>
-            <span class="score-text">보통<br>이다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q2" id="q2-4" value="4" />
-          <label for="q2-4">
-            <span class="score-num">4</span>
-            <span class="score-text">그렇다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q2" id="q2-5" value="5" />
-          <label for="q2-5">
-            <span class="score-num">5</span>
-            <span class="score-text">매우<br>그렇다</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Q3 -->
-    <div class="question-block">
-      <div class="question-label">
-        <span class="question-num">Q3</span>
-        결과가 내 실력에 비해 잘 안 나온 것 같다고 느꼈다
-      </div>
-      <div class="likert" id="q3">
-        <div class="likert-option">
-          <input type="radio" name="q3" id="q3-1" value="1" />
-          <label for="q3-1">
-            <span class="score-num">1</span>
-            <span class="score-text">전혀<br>그렇지 않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q3" id="q3-2" value="2" />
-          <label for="q3-2">
-            <span class="score-num">2</span>
-            <span class="score-text">그렇지<br>않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q3" id="q3-3" value="3" />
-          <label for="q3-3">
-            <span class="score-num">3</span>
-            <span class="score-text">보통<br>이다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q3" id="q3-4" value="4" />
-          <label for="q3-4">
-            <span class="score-num">4</span>
-            <span class="score-text">그렇다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q3" id="q3-5" value="5" />
-          <label for="q3-5">
-            <span class="score-num">5</span>
-            <span class="score-text">매우<br>그렇다</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Q4 -->
-    <div class="question-block">
-      <div class="question-label">
-        <span class="question-num">Q4</span>
-        목표 달성에 본인이 충분히 기여했다고 느꼈다
-      </div>
-      <div class="likert" id="q4">
-        <div class="likert-option">
-          <input type="radio" name="q4" id="q4-1" value="1" />
-          <label for="q4-1">
-            <span class="score-num">1</span>
-            <span class="score-text">전혀<br>그렇지 않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q4" id="q4-2" value="2" />
-          <label for="q4-2">
-            <span class="score-num">2</span>
-            <span class="score-text">그렇지<br>않다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q4" id="q4-3" value="3" />
-          <label for="q4-3">
-            <span class="score-num">3</span>
-            <span class="score-text">보통<br>이다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q4" id="q4-4" value="4" />
-          <label for="q4-4">
-            <span class="score-num">4</span>
-            <span class="score-text">그렇다</span>
-          </label>
-        </div>
-        <div class="likert-option">
-          <input type="radio" name="q4" id="q4-5" value="5" />
-          <label for="q4-5">
-            <span class="score-num">5</span>
-            <span class="score-text">매우<br>그렇다</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- 미응답 경고 배너 -->
+    <!-- 경고 배너 -->
     <div class="warn-banner" id="warnBanner">
-      ⚠️ 일부 문항에 응답하지 않았습니다. 그래도 제출하시겠습니까?
+      ⚠️ 일부 문항에 응답하지 않은 세그먼트가 있습니다. 그래도 제출하시겠습니까?
       <div class="warn-actions">
         <button type="button" class="warn-confirm-btn" id="warnConfirm">그래도 제출</button>
         <button type="button" class="warn-cancel-btn" id="warnCancel">돌아가기</button>
@@ -631,7 +352,6 @@
     <div class="error-msg" id="errorMsg"></div>
   </form>
 
-  <!-- 완료 메시지 -->
   <div class="success-msg" id="successMsg">
     <div class="icon">✅</div>
     <h2>설문이 완료되었습니다!</h2>
@@ -640,77 +360,160 @@
 </div>
 
 <script>
-  // ============================================================
-  // Google Apps Script 웹앱 URL을 아래에 붙여넣으세요
-  // (README.md 의 설정 가이드 참고)
-  // ============================================================
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEwDISQ4w97tkyCDF3WDwt75wu8T-UfvJ1LX8N-Y2ulBwjL2-EtKk3owKKMRcTy_lwSQ/exec";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqrDu2Jmt7tOM9CCkb9AC6KOBkAjUtN9Ce3BR7r3BehyePwrQyfuGOjte5j132_D2xeA/exec";
+  const MAX_SEGMENTS = 6;
 
-  const form = document.getElementById("surveyForm");
+  const QUESTIONS = [
+    { key: "q1", text: "게임이 느리거나 부자연스럽게 느껴졌다" },
+    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느꼈다" },
+    { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느꼈다" },
+    { key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느꼈다" },
+  ];
+
+  const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
+
+  let segCounter = 0;
+  const segmentList = document.getElementById("segmentList");
+  const addSegmentBtn = document.getElementById("addSegmentBtn");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
   const warnBanner = document.getElementById("warnBanner");
-  const warnConfirm = document.getElementById("warnConfirm");
-  const warnCancel = document.getElementById("warnCancel");
-  const currentStageLabel = document.getElementById("currentStageLabel");
 
-  // 시나리오/단계 선택 시 섹션 헤더 업데이트
-  document.querySelectorAll('input[name="scenario"], input[name="stage"]').forEach(radio => {
-    radio.addEventListener("change", updateStageLabel);
-  });
-
-  function updateStageLabel() {
-    const scenario = form.scenario.value;
-    const stage = form.stage.value;
-    if (scenario && stage) {
-      currentStageLabel.textContent = `시나리오 ${scenario} · ${stage}`;
-    } else if (scenario) {
-      currentStageLabel.textContent = `시나리오 ${scenario}`;
-    } else if (stage) {
-      currentStageLabel.textContent = stage;
-    } else {
-      currentStageLabel.textContent = "설문 문항";
-    }
+  function getSegmentCount() {
+    return segmentList.querySelectorAll(".segment-card").length;
   }
 
-  // 미응답 경고 확인 시 강제 제출
-  warnConfirm.addEventListener("click", function () {
+  function updateAddBtn() {
+    addSegmentBtn.disabled = getSegmentCount() >= MAX_SEGMENTS;
+  }
+
+  function updateSegmentHeaders() {
+    const cards = segmentList.querySelectorAll(".segment-card");
+    cards.forEach((card, i) => {
+      card.querySelector(".seg-index").textContent = `세그먼트 ${i + 1}`;
+      // 삭제 버튼: 1개 남으면 숨김
+      const rmBtn = card.querySelector(".remove-btn");
+      rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
+    });
+  }
+
+  function addSegment(preset = {}) {
+    if (getSegmentCount() >= MAX_SEGMENTS) return;
+    const id = ++segCounter;
+
+    const card = document.createElement("div");
+    card.className = "segment-card";
+    card.dataset.segId = id;
+
+    card.innerHTML = `
+      <div class="segment-card-header">
+        <span class="segment-title"><span class="seg-index"></span></span>
+        <button type="button" class="remove-btn" title="이 세그먼트 삭제">✕</button>
+      </div>
+
+      <div class="seg-selectors">
+        <div class="seg-group">
+          <span class="seg-group-label">시나리오</span>
+          <div class="seg-control">
+            ${[1,2,3].map(n => `
+              <input type="radio" name="seg${id}_scenario" id="seg${id}_sc${n}" value="${n}" ${preset.scenario == n ? "checked" : ""} />
+              <label for="seg${id}_sc${n}">${n}</label>
+            `).join("")}
+          </div>
+        </div>
+        <div class="seg-group">
+          <span class="seg-group-label">단계</span>
+          <div class="seg-control">
+            <input type="radio" name="seg${id}_stage" id="seg${id}_before" value="적용 전" ${preset.stage === "적용 전" ? "checked" : ""} />
+            <label for="seg${id}_before">적용 전</label>
+            <input type="radio" name="seg${id}_stage" id="seg${id}_after" value="적용 후" ${preset.stage === "적용 후" ? "checked" : ""} />
+            <label for="seg${id}_after">적용 후</label>
+          </div>
+        </div>
+      </div>
+
+      ${QUESTIONS.map((q, qi) => `
+        <div class="question-block">
+          <div class="question-label">
+            <span class="question-num">Q${qi + 1}</span>${q.text}
+          </div>
+          <div class="likert">
+            ${[1,2,3,4,5].map(v => `
+              <div class="likert-option">
+                <input type="radio" name="seg${id}_${q.key}" id="seg${id}_${q.key}_${v}" value="${v}" />
+                <label for="seg${id}_${q.key}_${v}">
+                  <span class="score-num">${v}</span>
+                  <span class="score-text">${LIKERT_LABELS[v-1]}</span>
+                </label>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `).join("")}
+    `;
+
+    card.querySelector(".remove-btn").addEventListener("click", () => {
+      card.remove();
+      updateSegmentHeaders();
+      updateAddBtn();
+    });
+
+    segmentList.appendChild(card);
+    updateSegmentHeaders();
+    updateAddBtn();
+  }
+
+  addSegmentBtn.addEventListener("click", () => addSegment());
+
+  // 초기 세그먼트 1개
+  addSegment();
+
+  // 미응답 경고 처리
+  document.getElementById("warnConfirm").addEventListener("click", () => {
     warnBanner.style.display = "none";
     doSubmit(true);
   });
-
-  warnCancel.addEventListener("click", function () {
+  document.getElementById("warnCancel").addEventListener("click", () => {
     warnBanner.style.display = "none";
   });
 
-  form.addEventListener("submit", async function (e) {
+  document.getElementById("surveyForm").addEventListener("submit", (e) => {
     e.preventDefault();
     warnBanner.style.display = "none";
-
-    const userId = document.getElementById("userId").value.trim();
-    if (!userId) {
-      showError("참가자 ID를 입력해 주세요.");
-      return;
-    }
-
-    const scenario = form.scenario.value;
-    if (!scenario) {
-      showError("시나리오를 선택해 주세요.");
-      return;
-    }
-
-    const stage = form.stage.value;
-    if (!stage) {
-      showError("단계(적용 전/후)를 선택해 주세요.");
-      return;
-    }
-
     hideError();
 
-    // Q1~Q4 미응답 항목 확인
-    const answered = ["q1","q2","q3","q4"].filter(q => form[q].value);
-    if (answered.length < 4) {
+    const userId = document.getElementById("userId").value.trim();
+    if (!userId) { showError("참가자 ID를 입력해 주세요."); return; }
+
+    const cards = segmentList.querySelectorAll(".segment-card");
+    let allValid = true;
+
+    for (const card of cards) {
+      const id = card.dataset.segId;
+      const scenario = document.querySelector(`input[name="seg${id}_scenario"]:checked`);
+      const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`);
+      if (!scenario || !stage) {
+        showError("모든 세그먼트에서 시나리오와 단계를 선택해 주세요.");
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+    }
+
+    // Q 미응답 체크
+    let hasUnanswered = false;
+    for (const card of cards) {
+      const id = card.dataset.segId;
+      for (const q of QUESTIONS) {
+        if (!document.querySelector(`input[name="seg${id}_${q.key}"]:checked`)) {
+          hasUnanswered = true;
+          break;
+        }
+      }
+      if (hasUnanswered) break;
+    }
+
+    if (hasUnanswered) {
       warnBanner.style.display = "block";
       return;
     }
@@ -718,32 +521,29 @@
     doSubmit(false);
   });
 
-  async function doSubmit(allowPartial) {
+  async function doSubmit() {
     const userId = document.getElementById("userId").value.trim();
-    const scenario = form.scenario.value;
-    const stage = form.stage.value;
+    const timestamp = new Date().toISOString();
+    const cards = segmentList.querySelectorAll(".segment-card");
 
-    const q1 = form.q1.value ? parseInt(form.q1.value) : null;
-    const q2 = form.q2.value ? parseInt(form.q2.value) : null;
-    const q3 = form.q3.value ? parseInt(form.q3.value) : null;
-    const q4 = form.q4.value ? parseInt(form.q4.value) : null;
+    const records = [];
+    for (const card of cards) {
+      const id = card.dataset.segId;
+      const scenario = parseInt(document.querySelector(`input[name="seg${id}_scenario"]:checked`).value);
+      const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`).value;
+      const entry = { userId, scenario, stage, timestamp };
+      for (const q of QUESTIONS) {
+        const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
+        entry[q.key] = checked ? parseInt(checked.value) : null;
+      }
+      records.push(entry);
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
 
-    const payload = {
-      userId,
-      scenario: parseInt(scenario),
-      stage,
-      q1,
-      q2,
-      q3,
-      q4,
-      timestamp: new Date().toISOString(),
-    };
-
     if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
-      saveLocally(payload);
+      saveLocally(records);
       showSuccess();
       return;
     }
@@ -753,9 +553,9 @@
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ records }),
       });
-      saveLocally(payload);
+      saveLocally(records);
       showSuccess();
     } catch (err) {
       submitBtn.disabled = false;
@@ -764,15 +564,15 @@
     }
   }
 
-  function saveLocally(data) {
+  function saveLocally(records) {
     const key = "qoe_responses";
     const existing = JSON.parse(localStorage.getItem(key) || "[]");
-    existing.push(data);
+    existing.push(...records);
     localStorage.setItem(key, JSON.stringify(existing));
   }
 
   function showSuccess() {
-    form.style.display = "none";
+    document.getElementById("surveyForm").style.display = "none";
     successMsg.style.display = "block";
   }
 
