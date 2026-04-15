@@ -75,11 +75,104 @@
       border-color: #667eea;
     }
 
+    /* 시나리오 / 단계 선택 */
+    .stage-section {
+      margin-bottom: 32px;
+    }
+
+    .stage-section .stage-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .stage-group {
+      flex: 1;
+    }
+
+    .stage-group .stage-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 10px;
+    }
+
+    .seg-control {
+      display: flex;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .seg-control input[type="radio"] {
+      display: none;
+    }
+
+    .seg-control label {
+      flex: 1;
+      text-align: center;
+      padding: 10px 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #718096;
+      cursor: pointer;
+      border-right: 1px solid #e2e8f0;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .seg-control label:last-of-type {
+      border-right: none;
+    }
+
+    .seg-control input[type="radio"]:checked + label {
+      background: #667eea;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .stage-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #ebf4ff;
+      color: #4c6ef5;
+      display: none;
+    }
+
     /* 구분선 */
     .divider {
       border: none;
       border-top: 1px solid #e2e8f0;
       margin: 32px 0;
+    }
+
+    /* 섹션 헤더 */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .section-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: #667eea;
+      color: #fff;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4a5568;
     }
 
     /* 질문 카드 */
@@ -177,6 +270,43 @@
       line-height: 1.3;
     }
 
+    /* 경고 배너 */
+    .warn-banner {
+      display: none;
+      background: #fffbeb;
+      border: 1px solid #f6e05e;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 20px;
+      font-size: 0.88rem;
+      color: #744210;
+    }
+
+    .warn-banner .warn-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .warn-actions button {
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .warn-confirm-btn {
+      background: #667eea;
+      color: #fff;
+    }
+
+    .warn-cancel-btn {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
     /* 제출 버튼 */
     .submit-btn {
       display: block;
@@ -249,6 +379,11 @@
       .score-text {
         font-size: 0.58rem;
       }
+
+      .stage-section .stage-row {
+        flex-direction: column;
+        gap: 16px;
+      }
     }
   </style>
 </head>
@@ -264,10 +399,44 @@
     <!-- 참가자 ID -->
     <div class="id-section">
       <label for="userId">참가자 ID</label>
-      <input type="text" id="userId" placeholder="예: P001" autocomplete="off" required />
+      <input type="text" id="userId" placeholder="예: P001" autocomplete="off" />
+    </div>
+
+    <!-- 시나리오 / 단계 선택 -->
+    <div class="stage-section">
+      <div class="stage-row">
+        <!-- 시나리오 선택 -->
+        <div class="stage-group">
+          <span class="stage-label">시나리오</span>
+          <div class="seg-control">
+            <input type="radio" name="scenario" id="sc1" value="1" />
+            <label for="sc1">1</label>
+            <input type="radio" name="scenario" id="sc2" value="2" />
+            <label for="sc2">2</label>
+            <input type="radio" name="scenario" id="sc3" value="3" />
+            <label for="sc3">3</label>
+          </div>
+        </div>
+        <!-- 단계 선택 -->
+        <div class="stage-group">
+          <span class="stage-label">단계</span>
+          <div class="seg-control">
+            <input type="radio" name="stage" id="st-before" value="적용 전" />
+            <label for="st-before">적용 전</label>
+            <input type="radio" name="stage" id="st-after" value="적용 후" />
+            <label for="st-after">적용 후</label>
+          </div>
+        </div>
+      </div>
     </div>
 
     <hr class="divider" />
+
+    <!-- 섹션 헤더 -->
+    <div class="section-header">
+      <span class="section-badge" id="currentStageLabel">설문 문항</span>
+      <span class="section-title">아래 문항에 응답해 주세요</span>
+    </div>
 
     <!-- Q1 -->
     <div class="question-block">
@@ -277,7 +446,7 @@
       </div>
       <div class="likert" id="q1">
         <div class="likert-option">
-          <input type="radio" name="q1" id="q1-1" value="1" required />
+          <input type="radio" name="q1" id="q1-1" value="1" />
           <label for="q1-1">
             <span class="score-num">1</span>
             <span class="score-text">전혀<br>그렇지 않다</span>
@@ -322,7 +491,7 @@
       </div>
       <div class="likert" id="q2">
         <div class="likert-option">
-          <input type="radio" name="q2" id="q2-1" value="1" required />
+          <input type="radio" name="q2" id="q2-1" value="1" />
           <label for="q2-1">
             <span class="score-num">1</span>
             <span class="score-text">전혀<br>그렇지 않다</span>
@@ -367,7 +536,7 @@
       </div>
       <div class="likert" id="q3">
         <div class="likert-option">
-          <input type="radio" name="q3" id="q3-1" value="1" required />
+          <input type="radio" name="q3" id="q3-1" value="1" />
           <label for="q3-1">
             <span class="score-num">1</span>
             <span class="score-text">전혀<br>그렇지 않다</span>
@@ -412,7 +581,7 @@
       </div>
       <div class="likert" id="q4">
         <div class="likert-option">
-          <input type="radio" name="q4" id="q4-1" value="1" required />
+          <input type="radio" name="q4" id="q4-1" value="1" />
           <label for="q4-1">
             <span class="score-num">1</span>
             <span class="score-text">전혀<br>그렇지 않다</span>
@@ -449,6 +618,15 @@
       </div>
     </div>
 
+    <!-- 미응답 경고 배너 -->
+    <div class="warn-banner" id="warnBanner">
+      ⚠️ 일부 문항에 응답하지 않았습니다. 그래도 제출하시겠습니까?
+      <div class="warn-actions">
+        <button type="button" class="warn-confirm-btn" id="warnConfirm">그래도 제출</button>
+        <button type="button" class="warn-cancel-btn" id="warnCancel">돌아가기</button>
+      </div>
+    </div>
+
     <button type="submit" class="submit-btn" id="submitBtn">제출하기</button>
     <div class="error-msg" id="errorMsg"></div>
   </form>
@@ -466,15 +644,49 @@
   // Google Apps Script 웹앱 URL을 아래에 붙여넣으세요
   // (README.md 의 설정 가이드 참고)
   // ============================================================
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqrDu2Jmt7tOM9CCkb9AC6KOBkAjUtN9Ce3BR7r3BehyePwrQyfuGOjte5j132_D2xeA/exec";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEwDISQ4w97tkyCDF3WDwt75wu8T-UfvJ1LX8N-Y2ulBwjL2-EtKk3owKKMRcTy_lwSQ/exec";
 
   const form = document.getElementById("surveyForm");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
+  const warnBanner = document.getElementById("warnBanner");
+  const warnConfirm = document.getElementById("warnConfirm");
+  const warnCancel = document.getElementById("warnCancel");
+  const currentStageLabel = document.getElementById("currentStageLabel");
+
+  // 시나리오/단계 선택 시 섹션 헤더 업데이트
+  document.querySelectorAll('input[name="scenario"], input[name="stage"]').forEach(radio => {
+    radio.addEventListener("change", updateStageLabel);
+  });
+
+  function updateStageLabel() {
+    const scenario = form.scenario.value;
+    const stage = form.stage.value;
+    if (scenario && stage) {
+      currentStageLabel.textContent = `시나리오 ${scenario} · ${stage}`;
+    } else if (scenario) {
+      currentStageLabel.textContent = `시나리오 ${scenario}`;
+    } else if (stage) {
+      currentStageLabel.textContent = stage;
+    } else {
+      currentStageLabel.textContent = "설문 문항";
+    }
+  }
+
+  // 미응답 경고 확인 시 강제 제출
+  warnConfirm.addEventListener("click", function () {
+    warnBanner.style.display = "none";
+    doSubmit(true);
+  });
+
+  warnCancel.addEventListener("click", function () {
+    warnBanner.style.display = "none";
+  });
 
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
+    warnBanner.style.display = "none";
 
     const userId = document.getElementById("userId").value.trim();
     if (!userId) {
@@ -482,30 +694,54 @@
       return;
     }
 
-    const q1 = form.q1.value;
-    const q2 = form.q2.value;
-    const q3 = form.q3.value;
-    const q4 = form.q4.value;
+    const scenario = form.scenario.value;
+    if (!scenario) {
+      showError("시나리오를 선택해 주세요.");
+      return;
+    }
 
-    if (!q1 || !q2 || !q3 || !q4) {
-      showError("모든 문항에 응답해 주세요.");
+    const stage = form.stage.value;
+    if (!stage) {
+      showError("단계(적용 전/후)를 선택해 주세요.");
       return;
     }
 
     hideError();
+
+    // Q1~Q4 미응답 항목 확인
+    const answered = ["q1","q2","q3","q4"].filter(q => form[q].value);
+    if (answered.length < 4) {
+      warnBanner.style.display = "block";
+      return;
+    }
+
+    doSubmit(false);
+  });
+
+  async function doSubmit(allowPartial) {
+    const userId = document.getElementById("userId").value.trim();
+    const scenario = form.scenario.value;
+    const stage = form.stage.value;
+
+    const q1 = form.q1.value ? parseInt(form.q1.value) : null;
+    const q2 = form.q2.value ? parseInt(form.q2.value) : null;
+    const q3 = form.q3.value ? parseInt(form.q3.value) : null;
+    const q4 = form.q4.value ? parseInt(form.q4.value) : null;
+
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
 
     const payload = {
       userId,
-      q1: parseInt(q1),
-      q2: parseInt(q2),
-      q3: parseInt(q3),
-      q4: parseInt(q4),
+      scenario: parseInt(scenario),
+      stage,
+      q1,
+      q2,
+      q3,
+      q4,
       timestamp: new Date().toISOString(),
     };
 
-    // Apps Script URL이 설정되지 않은 경우 로컬 저장만 수행
     if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
       saveLocally(payload);
       showSuccess();
@@ -526,7 +762,7 @@
       submitBtn.textContent = "제출하기";
       showError("제출 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
-  });
+  }
 
   function saveLocally(data) {
     const key = "qoe_responses";
