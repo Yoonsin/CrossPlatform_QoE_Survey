@@ -225,6 +225,72 @@
     .score-num { font-size: 1.1rem; font-weight: 700; color: #4a5568; }
     .score-text { font-size: 0.6rem; font-weight: 500; color: #718096; text-align: center; line-height: 1.3; }
 
+    /* Q2 추가 질문 */
+    .q2-followup {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: #fffbeb;
+      border: 1.5px solid #f6e05e;
+      border-radius: 10px;
+      animation: fadeIn 0.18s ease;
+    }
+    .q2-followup.visible { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+    .q2-followup-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #744210;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .q2-followup-label .question-num { background: #d69e2e; }
+
+    .q2-checkbox-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .q2-checkbox-option { display: flex; align-items: center; gap: 6px; }
+    .q2-checkbox-option input[type="checkbox"] { display: none; }
+    .q2-checkbox-option label {
+      padding: 6px 14px;
+      border: 2px solid #e2c976;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #744210;
+      cursor: pointer;
+      background: #fff;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+      user-select: none;
+    }
+    .q2-checkbox-option input[type="checkbox"]:checked + label {
+      background: #d69e2e;
+      border-color: #d69e2e;
+      color: #fff;
+    }
+
+    .q2-other-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid #e2c976;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.87rem;
+      color: #2d3748;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .q2-other-input:focus { border-color: #d69e2e; }
+    .q2-other-input::placeholder { color: #a0aec0; }
+
     /* 자유 의견 */
     .comment-block {
       margin-top: 20px;
@@ -471,7 +537,7 @@
     <div class="guide-section">
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
-        <li><strong>참가자 ID</strong>를 먼저 입력해 주세요. (예: P001)</li>
+        <li><strong>참가자 ID</strong>를 먼저 입력해 주세요. (예: 김이름)</li>
         <li>아래 <strong>세그먼트 추가</strong> 버튼을 눌러 평가할 영상 세그먼트를 추가하세요. (최대 6개)</li>
         <li>각 세그먼트마다 <strong>시나리오 번호</strong>와 <strong>단계 (적용 전/후)</strong>를 선택해 주세요.</li>
         <li>Q1~Q4 각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
@@ -483,11 +549,14 @@
     <div class="guide-section">
       <div class="guide-section-title">🎮 시나리오 설명</div>
       <ul class="guide-scenario-list">
-        <li><span class="sc-label">시나리오 1</span>두 플레이어가 같은 위치에 있고, 같은 목표를 사격합니다.</li>
-        <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.</li>
+        <li><span class="sc-label">시나리오 1</span>두 플레이어가 같은 위치에 있고, 같은 목표를 사격합니다.<br><strong>한 플레이어라도</strong> 목표 점수 10점을 채우면 게임이 종료됩니다.</li>
+        <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.<br><strong>두 플레이어 모두</strong> 목표 점수 10점을 채우면 게임이 종료됩니다. 
+</li>
       </ul>
       <ul class="guide-notes">
-        <li>한 플레이어라도 목표 점수 <strong>10점</strong>을 채우면 게임이 종료됩니다.</li>
+        <li>시나리오 1,2 모두 두 플레이어는 <strong>경쟁이 아니라 협력하는 입장 </strong>입니다. </li>
+        <li>즉, 다른 플레이어가 점수를 얻은 것은 <strong>같은 팀(파티)의 득점</strong>으로 보아야합니다. </li>
+        <li>시나리오의 목표는 플레이어 두 명이서 같이 점수를 빨리 채우는 것입니다. </li>
         <li>물체 사격 시 이펙트가 발생하며, 모바일은 <strong>빨간색</strong>, PC는 <strong>파란색</strong>으로 표시됩니다.</li>
         <li>(*로컬 플레이어의 사격은 로컬 월드 기준으로, 원격 플레이어의 사격은 서버 월드 기준으로 물체를 맞췄다고 판정됐을 때 발생합니다.)</li>
         <li>처음 실험하는 경우, 각 시나리오 플레이 전 튜토리얼을 한 번씩 진행합니다.</li>
@@ -542,10 +611,10 @@
   const MAX_SEGMENTS = 6;
 
   const QUESTIONS = [
-    { key: "q1", text: "게임이 느리거나 부자연스럽게 느껴졌다" },
-    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느꼈다" },
-    { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느꼈다" },
-    { key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느꼈다" },
+    { key: "q1", text: "나의 사격에 대한 입력 반응 전반이 느리거나 부자연스럽게 느껴졌다." },
+    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다."},
+    { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느껴졌다." },
+    { key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느껴졌다." },
   ];
 
   const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
@@ -627,6 +696,26 @@
               </div>
             `).join("")}
           </div>
+          ${q.key === "q2" ? `
+          <div class="q2-followup" id="seg${id}_q2followup">
+            <div class="q2-followup-label">
+              <span class="question-num">Q2-1</span>
+              어떤 환경 격차 때문인지 해당하는 항목을 모두 선택해 주세요.
+            </div>
+            <div class="q2-checkbox-group">
+              <div class="q2-checkbox-option">
+                <input type="checkbox" name="seg${id}_q2env" id="seg${id}_q2env_platform" value="플랫폼" />
+                <label for="seg${id}_q2env_platform">플랫폼</label>
+              </div>
+              <div class="q2-checkbox-option">
+                <input type="checkbox" name="seg${id}_q2env" id="seg${id}_q2env_network" value="네트워크" />
+                <label for="seg${id}_q2env_network">네트워크</label>
+              </div>
+            </div>
+            <input type="text" class="q2-other-input" id="seg${id}_q2env_other"
+              placeholder="그 외 — 직접 입력 (선택)" />
+          </div>
+          ` : ""}
         </div>
       `).join("")}
 
@@ -640,6 +729,15 @@
       card.remove();
       updateSegmentHeaders();
       updateAddBtn();
+    });
+
+    // Q2 점수에 따라 Q2-1 표시/숨김
+    card.querySelectorAll(`input[name="seg${id}_q2"]`).forEach(radio => {
+      radio.addEventListener("change", () => {
+        const followup = document.getElementById(`seg${id}_q2followup`);
+        const val = parseInt(radio.value);
+        followup.classList.toggle("visible", val >= 2);
+      });
     });
 
     segmentList.appendChild(card);
@@ -718,6 +816,16 @@
       for (const q of QUESTIONS) {
         const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
+      }
+      // Q2-1 환경 격차 (Q2 >= 2일 때만 수집)
+      if (entry.q2 !== null && entry.q2 >= 2) {
+        const envChecked = [...card.querySelectorAll(`input[name="seg${id}_q2env"]:checked`)].map(el => el.value);
+        const envOther = (document.getElementById(`seg${id}_q2env_other`)?.value || "").trim();
+        entry.q2_env = envChecked.join(", ") || null;
+        entry.q2_env_other = envOther || null;
+      } else {
+        entry.q2_env = null;
+        entry.q2_env_other = null;
       }
       entry.comment = (card.querySelector(`textarea[name="seg${id}_comment"]`).value || "").trim();
       records.push(entry);
