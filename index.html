@@ -327,6 +327,116 @@
       margin-top: 12px;
     }
 
+    /* 가이드라인 배너 */
+    .guide-banner {
+      background: linear-gradient(135deg, #ebf4ff 0%, #f0e6ff 100%);
+      border: 1.5px solid #a3bffa;
+      border-radius: 14px;
+      padding: 20px 24px 24px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .guide-section { margin-bottom: 18px; }
+    .guide-section:last-of-type { margin-bottom: 0; }
+
+    .guide-section-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #c3d0e8;
+    }
+
+    .guide-banner ol {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .guide-banner ol li {
+      font-size: 0.87rem;
+      color: #4a5568;
+      line-height: 1.75;
+    }
+
+    .guide-banner ol li strong { color: #2d3748; }
+
+    .guide-scenario-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .guide-scenario-list li {
+      font-size: 0.87rem;
+      color: #4a5568;
+      line-height: 1.6;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      padding: 7px 12px;
+    }
+
+    .guide-scenario-list li .sc-label {
+      display: inline-block;
+      background: #667eea;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 1px 8px;
+      margin-right: 7px;
+    }
+
+    .guide-notes {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .guide-notes li {
+      font-size: 0.83rem;
+      color: #5a6a7e;
+      line-height: 1.6;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .guide-notes li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .guide-notes li strong { color: #2d3748; }
+
+    .guide-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: #a0aec0;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+    }
+    .guide-close-btn:hover { background: #e2e8f0; color: #4a5568; }
+
     /* 완료 메시지 */
     .success-msg {
       display: none;
@@ -352,6 +462,38 @@
   <div class="card-header">
     <h1>QoE 설문조사</h1>
     <p>각 항목에 대해 본인의 생각과 가장 가까운 점수를 선택해 주세요.</p>
+  </div>
+
+  <!-- 가이드라인 배너 -->
+  <div class="guide-banner" id="guideBanner">
+    <button type="button" class="guide-close-btn" id="guideCloseBtn" title="가이드라인 닫기">✕</button>
+
+    <div class="guide-section">
+      <div class="guide-section-title">📋 설문 참여 안내</div>
+      <ol>
+        <li><strong>참가자 ID</strong>를 먼저 입력해 주세요. (예: P001)</li>
+        <li>아래 <strong>세그먼트 추가</strong> 버튼을 눌러 평가할 영상 세그먼트를 추가하세요. (최대 6개)</li>
+        <li>각 세그먼트마다 <strong>시나리오 번호</strong>와 <strong>단계 (적용 전/후)</strong>를 선택해 주세요.</li>
+        <li>Q1~Q4 각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
+        <li>자유 의견란은 선택 사항입니다. 느낀 점을 자유롭게 작성하셔도 됩니다.</li>
+        <li>모든 세그먼트 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
+      </ol>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">🎮 시나리오 설명</div>
+      <ul class="guide-scenario-list">
+        <li><span class="sc-label">시나리오 1</span>두 플레이어가 같은 위치에 있고, 같은 목표를 사격합니다.</li>
+        <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.</li>
+      </ul>
+      <ul class="guide-notes">
+        <li>한 플레이어라도 목표 점수 <strong>10점</strong>을 채우면 게임이 종료됩니다.</li>
+        <li>물체 사격 시 이펙트가 발생하며, 모바일은 <strong>빨간색</strong>, PC는 <strong>파란색</strong>으로 표시됩니다.</li>
+        <li>(*로컬 플레이어의 사격은 로컬 월드 기준으로, 원격 플레이어의 사격은 서버 월드 기준으로 물체를 맞췄다고 판정됐을 때 발생합니다.)</li>
+        <li>처음 실험하는 경우, 각 시나리오 플레이 전 튜토리얼을 한 번씩 진행합니다.</li>
+        <li>화면 위쪽 점수판에서 자신의 점수는 항상 <strong>왼쪽</strong>에 표시됩니다.</li>
+      </ul>
+    </div>
   </div>
 
   <form id="surveyForm">
@@ -392,6 +534,10 @@
 </div>
 
 <script>
+  document.getElementById("guideCloseBtn").addEventListener("click", () => {
+    document.getElementById("guideBanner").style.display = "none";
+  });
+
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmMFThoYEJ_k0qESDcPI6MVHtQ9zyPo5k2dGMNj2UYDocmzYc-fWWv5f-WZsigrriEmQ/exec";
   const MAX_SEGMENTS = 6;
 
@@ -448,7 +594,7 @@
         <div class="seg-group">
           <span class="seg-group-label">시나리오</span>
           <div class="seg-control">
-            ${[1,2,3].map(n => `
+            ${[1,2].map(n => `
               <input type="radio" name="seg${id}_scenario" id="seg${id}_sc${n}" value="${n}" ${preset.scenario == n ? "checked" : ""} />
               <label for="seg${id}_sc${n}">${n}</label>
             `).join("")}
