@@ -71,15 +71,94 @@
       margin: 28px 0;
     }
 
+    /* 세그먼트 탭 */
+    .seg-tabs-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .seg-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .seg-tab {
+      padding: 5px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #718096;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+      white-space: nowrap;
+    }
+    .seg-tab:hover { border-color: #a3bffa; background: #ebf4ff; color: #4a5568; }
+    .seg-tab.active { background: #667eea; border-color: #667eea; color: #fff; }
+
+    .add-segment-btn-sm {
+      width: 34px;
+      height: 34px;
+      border: 2px dashed #c3d0e8;
+      border-radius: 8px;
+      background: #fff;
+      color: #667eea;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+      line-height: 1;
+    }
+    .add-segment-btn-sm:hover { background: #ebf4ff; border-color: #667eea; }
+    .add-segment-btn-sm:disabled { color: #a0aec0; border-color: #e2e8f0; cursor: not-allowed; background: #fff; }
+
+    /* 세그먼트 페이지 네비게이션 */
+    .seg-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 0 24px;
+    }
+
+    .seg-nav-btn {
+      padding: 8px 22px;
+      border: 2px solid #e2e8f0;
+      border-radius: 9px;
+      background: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #4a5568;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .seg-nav-btn:hover:not(:disabled) { background: #ebf4ff; border-color: #667eea; color: #667eea; }
+    .seg-nav-btn:disabled { color: #c0cad8; border-color: #e8edf2; cursor: not-allowed; }
+
+    .seg-page-indicator {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #718096;
+    }
+
     /* 세그먼트 카드 */
     .segment-card {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
       border-radius: 14px;
       padding: 24px 28px;
-      margin-bottom: 20px;
       position: relative;
+      display: none;
     }
+    .segment-card.active { display: block; }
 
     .segment-card-header {
       display: flex;
@@ -549,16 +628,20 @@
     <div class="guide-section">
       <div class="guide-section-title">🎮 시나리오 설명</div>
       <ul class="guide-scenario-list">
-        <li><span class="sc-label">시나리오 1</span>두 플레이어가 같은 위치에 있고, 같은 목표를 사격합니다.<br><strong>한 플레이어라도</strong> 목표 점수 10점을 채우면 게임이 종료됩니다.</li>
-        <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.<br><strong>두 플레이어 모두</strong> 목표 점수 10점을 채우면 게임이 종료됩니다. 
+        <li><span class="sc-label">시나리오 1</span>표적이 항상 조준점에 스폰되며, 움직이지 않습니다.</li>
+        <li><span class="sc-label">시나리오 2</span>표적이 화면 안 랜덤한 위치에 스폰되며, 움직이지 않습니다.</li>
+        <li><span class="sc-label">시나리오 3</span>표적이 화면 밖의 랜덤한 위치에 스폰되며, 랜덤한 속도로 좌우로 움직입니다.</li>
+        <!-- <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.<br><strong>두 플레이어 모두</strong> 목표 점수 10점을 채우면 게임이 종료됩니다. -->
 </li>
       </ul>
       <ul class="guide-notes">
-        <li>시나리오 1,2 모두 두 플레이어는 <strong>경쟁이 아니라 협력하는 입장 </strong>입니다. </li>
-        <li>즉, 다른 플레이어가 점수를 얻은 것은 <strong>같은 팀(파티)의 득점</strong>으로 보아야합니다. </li>
-        <li>시나리오의 목표는 플레이어 두 명이서 같이 점수를 빨리 채우는 것입니다. </li>
-        <li>물체 사격 시 이펙트가 발생하며, 모바일은 <strong>빨간색</strong>, PC는 <strong>파란색</strong>으로 표시됩니다.</li>
-        <li>(*로컬 플레이어의 사격은 로컬 월드 기준으로, 원격 플레이어의 사격은 서버 월드 기준으로 물체를 맞췄다고 판정됐을 때 발생합니다.)</li>
+        <li>시나리오 1,2,3 모두 두 플레이어는 <strong>경쟁하는 입장 </strong>입니다. </li>
+        <li>또한 두 플레이어는 같은 위치에 있으며, 같은 목표를 사격합니다. </li>
+        <li>한 플레이어라도 <strong>목표 점수 10점</strong>을 채우면 게임이 종료됩니다. </li>
+        <li>시나리오의 목표는 게임이 끝날 때까지 <strong>내 플레이어가 최대한 점수를 많이 채우는 것입니다.</strong></li>
+        <li>매 표적이 스폰되는 시간은 랜덤하게 달라집니다.</li>
+        <li>표적 사격 시 이펙트가 발생하며, 모바일은 <strong>빨간색</strong>, PC는 <strong>파란색</strong>으로 표시됩니다.</li>
+        <li>(*플레이어의 사격 이펙트는 실제로 점수를 득점했을 때만 발생합니다.)</li>
         <li>처음 실험하는 경우, 각 시나리오 플레이 전 튜토리얼을 한 번씩 진행합니다.</li>
         <li>화면 위쪽 점수판에서 자신의 점수는 항상 <strong>왼쪽</strong>에 표시됩니다.</li>
       </ul>
@@ -574,13 +657,21 @@
 
     <hr class="divider" />
 
-    <!-- 세그먼트 목록 -->
+    <!-- 세그먼트 탭 + 추가 버튼 -->
+    <div class="seg-tabs-wrap">
+      <div class="seg-tabs" id="segTabs"></div>
+      <button type="button" class="add-segment-btn-sm" id="addSegmentBtn" title="세그먼트 추가">+</button>
+    </div>
+
+    <!-- 세그먼트 목록 (한 번에 하나씩 표시) -->
     <div id="segmentList"></div>
 
-    <!-- 세그먼트 추가 버튼 -->
-    <button type="button" class="add-segment-btn" id="addSegmentBtn">
-      + 세그먼트 추가
-    </button>
+    <!-- 페이지 네비게이션 -->
+    <div class="seg-nav">
+      <button type="button" class="seg-nav-btn" id="prevSegBtn">← 이전</button>
+      <span class="seg-page-indicator" id="segPageIndicator">1 / 1</span>
+      <button type="button" class="seg-nav-btn" id="nextSegBtn">다음 →</button>
+    </div>
 
     <!-- 경고 배너 -->
     <div class="warn-banner" id="warnBanner">
@@ -612,14 +703,15 @@
 
   const QUESTIONS = [
     { key: "q1", text: "나의 사격에 대한 입력 반응 전반이 느리거나 부자연스럽게 느껴졌다." },
-    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다."},
+    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다." },
     { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느껴졌다." },
-    { key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느껴졌다." },
+    //{ key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느껴졌다." }, 
   ];
 
   const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
 
   let segCounter = 0;
+  let currentSegIdx = 0;
   const segmentList = document.getElementById("segmentList");
   const addSegmentBtn = document.getElementById("addSegmentBtn");
   const submitBtn = document.getElementById("submitBtn");
@@ -627,26 +719,49 @@
   const errorMsg = document.getElementById("errorMsg");
   const warnBanner = document.getElementById("warnBanner");
 
-  function getSegmentCount() {
-    return segmentList.querySelectorAll(".segment-card").length;
+  function getCards() {
+    return [...segmentList.querySelectorAll(".segment-card")];
   }
 
   function updateAddBtn() {
-    addSegmentBtn.disabled = getSegmentCount() >= MAX_SEGMENTS;
+    addSegmentBtn.disabled = getCards().length >= MAX_SEGMENTS;
+  }
+
+  function renderTabs() {
+    const cards = getCards();
+    const tabs = document.getElementById("segTabs");
+    tabs.innerHTML = cards.map((_, i) => `
+      <button type="button" class="seg-tab${i === currentSegIdx ? " active" : ""}" data-idx="${i}">
+        세그먼트 ${i + 1}
+      </button>
+    `).join("");
+    tabs.querySelectorAll(".seg-tab").forEach(btn => {
+      btn.addEventListener("click", () => showPage(parseInt(btn.dataset.idx)));
+    });
+    document.getElementById("segPageIndicator").textContent = `${currentSegIdx + 1} / ${cards.length}`;
+    document.getElementById("prevSegBtn").disabled = currentSegIdx === 0;
+    document.getElementById("nextSegBtn").disabled = currentSegIdx >= cards.length - 1;
+  }
+
+  function showPage(idx) {
+    const cards = getCards();
+    if (!cards.length) return;
+    currentSegIdx = Math.max(0, Math.min(idx, cards.length - 1));
+    cards.forEach((c, i) => c.classList.toggle("active", i === currentSegIdx));
+    renderTabs();
   }
 
   function updateSegmentHeaders() {
-    const cards = segmentList.querySelectorAll(".segment-card");
+    const cards = getCards();
     cards.forEach((card, i) => {
       card.querySelector(".seg-index").textContent = `세그먼트 ${i + 1}`;
-      // 삭제 버튼: 1개 남으면 숨김
       const rmBtn = card.querySelector(".remove-btn");
       rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
     });
   }
 
   function addSegment(preset = {}) {
-    if (getSegmentCount() >= MAX_SEGMENTS) return;
+    if (getCards().length >= MAX_SEGMENTS) return;
     const id = ++segCounter;
 
     const card = document.createElement("div");
@@ -663,7 +778,7 @@
         <div class="seg-group">
           <span class="seg-group-label">시나리오</span>
           <div class="seg-control">
-            ${[1,2].map(n => `
+            ${[1,2,3].map(n => `
               <input type="radio" name="seg${id}_scenario" id="seg${id}_sc${n}" value="${n}" ${preset.scenario == n ? "checked" : ""} />
               <label for="seg${id}_sc${n}">${n}</label>
             `).join("")}
@@ -726,34 +841,39 @@
     `;
 
     card.querySelector(".remove-btn").addEventListener("click", () => {
+      const allCards = getCards();
+      const idx = allCards.indexOf(card);
       card.remove();
       updateSegmentHeaders();
       updateAddBtn();
+      showPage(Math.min(idx, getCards().length - 1));
     });
 
-    // Q2 점수에 따라 Q2-1 표시/숨김
     card.querySelectorAll(`input[name="seg${id}_q2"]`).forEach(radio => {
       radio.addEventListener("change", () => {
         const followup = document.getElementById(`seg${id}_q2followup`);
-        const val = parseInt(radio.value);
-        followup.classList.toggle("visible", val >= 2);
+        followup.classList.toggle("visible", parseInt(radio.value) >= 2);
       });
     });
 
     segmentList.appendChild(card);
     updateSegmentHeaders();
     updateAddBtn();
+    showPage(getCards().length - 1);
   }
 
   addSegmentBtn.addEventListener("click", () => addSegment());
+  document.getElementById("prevSegBtn").addEventListener("click", () => showPage(currentSegIdx - 1));
+  document.getElementById("nextSegBtn").addEventListener("click", () => showPage(currentSegIdx + 1));
 
-  // 초기 세그먼트 1개
-  addSegment();
+  // 시나리오 3개 × 적용 전/후 = 6개 미리 생성
+  [1, 2, 3].forEach(sc => ["적용 전", "적용 후"].forEach(stage => addSegment({ scenario: sc, stage })));
+  showPage(0);
 
   // 미응답 경고 처리
   document.getElementById("warnConfirm").addEventListener("click", () => {
     warnBanner.style.display = "none";
-    doSubmit(true);
+    doSubmit();
   });
   document.getElementById("warnCancel").addEventListener("click", () => {
     warnBanner.style.display = "none";
@@ -767,8 +887,7 @@
     const userId = document.getElementById("userId").value.trim();
     if (!userId) { showError("참가자 ID를 입력해 주세요."); return; }
 
-    const cards = segmentList.querySelectorAll(".segment-card");
-    let allValid = true;
+    const cards = getCards();
 
     for (const card of cards) {
       const id = card.dataset.segId;
@@ -776,36 +895,36 @@
       const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`);
       if (!scenario || !stage) {
         showError("모든 세그먼트에서 시나리오와 단계를 선택해 주세요.");
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        showPage(cards.indexOf(card));
         return;
       }
     }
 
     // Q 미응답 체크
-    let hasUnanswered = false;
+    let unansweredCard = null;
     for (const card of cards) {
       const id = card.dataset.segId;
       for (const q of QUESTIONS) {
         if (!document.querySelector(`input[name="seg${id}_${q.key}"]:checked`)) {
-          hasUnanswered = true;
-          break;
+          unansweredCard = card; break;
         }
       }
-      if (hasUnanswered) break;
+      if (unansweredCard) break;
     }
 
-    if (hasUnanswered) {
+    if (unansweredCard) {
       warnBanner.style.display = "block";
+      showPage(cards.indexOf(unansweredCard));
       return;
     }
 
-    doSubmit(false);
+    doSubmit();
   });
 
   async function doSubmit() {
     const userId = document.getElementById("userId").value.trim();
     const timestamp = new Date().toISOString();
-    const cards = segmentList.querySelectorAll(".segment-card");
+    const cards = getCards();
 
     const records = [];
     for (const card of cards) {
@@ -817,7 +936,6 @@
         const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
       }
-      // Q2-1 환경 격차 (Q2 >= 2일 때만 수집)
       if (entry.q2 !== null && entry.q2 >= 2) {
         const envChecked = [...card.querySelectorAll(`input[name="seg${id}_q2env"]:checked`)].map(el => el.value);
         const envOther = (document.getElementById(`seg${id}_q2env_other`)?.value || "").trim();
