@@ -495,8 +495,14 @@
       margin: 30px 0 24px;
     }
 
-    .algorithm2-card {
-      display: block;
+    .seg-control input[type="radio"]:disabled + label {
+      cursor: default;
+    }
+
+    .seg-control input[type="radio"]:disabled:not(:checked) + label {
+      color: #c0cad8;
+      background: #f8fafc;
+      cursor: not-allowed;
     }
 
     /* 가이드라인 배너 */
@@ -729,7 +735,22 @@
       <div class="survey-section-heading">
         <h2 id="algorithm2Title">알고리즘 2 설문</h2>
       </div>
-      <div class="segment-card active algorithm2-card" id="algorithm2Survey"></div>
+
+      <!-- 설문 탭 + 추가 버튼 -->
+      <div class="seg-tabs-wrap">
+        <div class="seg-tabs" id="alg2Tabs"></div>
+        <button type="button" class="add-segment-btn-sm" id="addAlg2SurveyBtn" title="설문 추가">+</button>
+      </div>
+
+      <!-- 설문 목록 (한 번에 하나씩 표시) -->
+      <div id="algorithm2List"></div>
+
+      <!-- 페이지 네비게이션 -->
+      <div class="seg-nav">
+        <button type="button" class="seg-nav-btn" id="prevAlg2Btn">← 이전</button>
+        <span class="seg-page-indicator" id="alg2PageIndicator">1 / 1</span>
+        <button type="button" class="seg-nav-btn" id="nextAlg2Btn">다음 →</button>
+      </div>
     </section>
 
     <!-- 경고 배너 -->
@@ -772,17 +793,25 @@
     { key: "q2", text: "오브젝트의 튐, 멈칫거림, 갑작스러운 위치 변화가 적었다." },
   ];
 
+  const ALGORITHM2_INITIAL_SURVEYS = [
+    { stage: "적용 전" },
+    { stage: "적용 후" },
+  ];
+
   const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
 
   let segCounter = 0;
   let currentSegIdx = 0;
+  let alg2Counter = 0;
+  let currentAlg2Idx = 0;
   const segmentList = document.getElementById("segmentList");
   const addSegmentBtn = document.getElementById("addSegmentBtn");
+  const algorithm2List = document.getElementById("algorithm2List");
+  const addAlg2SurveyBtn = document.getElementById("addAlg2SurveyBtn");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
   const warnBanner = document.getElementById("warnBanner");
-  const algorithm2Survey = document.getElementById("algorithm2Survey");
 
   function getParticipantInfo() {
     return {
@@ -802,26 +831,6 @@
         </label>
       </div>
     `).join("");
-  }
-
-  function renderAlgorithm2Survey() {
-    algorithm2Survey.innerHTML = `
-      ${ALGORITHM2_QUESTIONS.map((q, qi) => `
-        <div class="question-block">
-          <div class="question-label">
-            <span class="question-num">Q${qi + 1}</span>${q.text}
-          </div>
-          <div class="likert">
-            ${renderLikertOptions(`algorithm2_${q.key}`, `algorithm2_${q.key}`)}
-          </div>
-        </div>
-      `).join("")}
-
-      <div class="comment-block">
-        <label for="algorithm2_comment">자유 의견 (선택)</label>
-        <textarea id="algorithm2_comment" name="algorithm2_comment" placeholder="알고리즘 2에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
-      </div>
-    `;
   }
 
   function getQuestionValue(name) {
@@ -972,15 +981,129 @@
     showPage(getCards().length - 1);
   }
 
+  function getAlg2Cards() {
+    return [...algorithm2List.querySelectorAll(".segment-card")];
+  }
+
+  function updateAlg2AddBtn() {
+    addAlg2SurveyBtn.disabled = getAlg2Cards().length >= MAX_SEGMENTS;
+  }
+
+  function renderAlg2Tabs() {
+    const cards = getAlg2Cards();
+    const tabs = document.getElementById("alg2Tabs");
+    tabs.innerHTML = cards.map((_, i) => `
+      <button type="button" class="seg-tab${i === currentAlg2Idx ? " active" : ""}" data-idx="${i}">
+        설문 ${i + 1}
+      </button>
+    `).join("");
+    tabs.querySelectorAll(".seg-tab").forEach(btn => {
+      btn.addEventListener("click", () => showAlg2Page(parseInt(btn.dataset.idx)));
+    });
+    document.getElementById("alg2PageIndicator").textContent = `${currentAlg2Idx + 1} / ${cards.length}`;
+    document.getElementById("prevAlg2Btn").disabled = currentAlg2Idx === 0;
+    document.getElementById("nextAlg2Btn").disabled = currentAlg2Idx >= cards.length - 1;
+  }
+
+  function showAlg2Page(idx) {
+    const cards = getAlg2Cards();
+    if (!cards.length) return;
+    currentAlg2Idx = Math.max(0, Math.min(idx, cards.length - 1));
+    cards.forEach((c, i) => c.classList.toggle("active", i === currentAlg2Idx));
+    renderAlg2Tabs();
+  }
+
+  function updateAlg2Headers() {
+    const cards = getAlg2Cards();
+    cards.forEach((card, i) => {
+      card.querySelector(".seg-index").textContent = `설문 ${i + 1}`;
+      const rmBtn = card.querySelector(".remove-btn");
+      rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
+    });
+  }
+
+  function addAlgorithm2Survey(preset = {}) {
+    if (getAlg2Cards().length >= MAX_SEGMENTS) return;
+    const id = ++alg2Counter;
+
+    const card = document.createElement("div");
+    card.className = "segment-card";
+    card.dataset.alg2Id = id;
+
+    card.innerHTML = `
+      <div class="segment-card-header">
+        <span class="segment-title"><span class="seg-index"></span></span>
+        <button type="button" class="remove-btn" title="이 설문 삭제">✕</button>
+      </div>
+
+      <div class="seg-selectors">
+        <div class="seg-group">
+          <span class="seg-group-label">시나리오</span>
+          <div class="seg-control">
+            ${[1,2,3].map(n => `
+              <input type="radio" name="alg2${id}_scenario" id="alg2${id}_sc${n}" value="${n}" ${n === 3 ? "checked" : ""} disabled />
+              <label for="alg2${id}_sc${n}">${n}</label>
+            `).join("")}
+          </div>
+        </div>
+        <div class="seg-group">
+          <span class="seg-group-label">단계</span>
+          <div class="seg-control">
+            <input type="radio" name="alg2${id}_stage" id="alg2${id}_before" value="적용 전" ${preset.stage === "적용 전" ? "checked" : ""} />
+            <label for="alg2${id}_before">적용 전</label>
+            <input type="radio" name="alg2${id}_stage" id="alg2${id}_after" value="적용 후" ${preset.stage === "적용 후" ? "checked" : ""} />
+            <label for="alg2${id}_after">적용 후</label>
+          </div>
+        </div>
+      </div>
+
+      ${ALGORITHM2_QUESTIONS.map((q, qi) => `
+        <div class="question-block">
+          <div class="question-label">
+            <span class="question-num">Q${qi + 1}</span>${q.text}
+          </div>
+          <div class="likert">
+            ${renderLikertOptions(`alg2${id}_${q.key}`, `alg2${id}_${q.key}`)}
+          </div>
+        </div>
+      `).join("")}
+
+      <div class="comment-block">
+        <label for="alg2${id}_comment">자유 의견 (선택)</label>
+        <textarea id="alg2${id}_comment" name="alg2${id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+      </div>
+    `;
+
+    card.querySelector(".remove-btn").addEventListener("click", () => {
+      const allCards = getAlg2Cards();
+      const idx = allCards.indexOf(card);
+      card.remove();
+      updateAlg2Headers();
+      updateAlg2AddBtn();
+      showAlg2Page(Math.min(idx, getAlg2Cards().length - 1));
+    });
+
+    algorithm2List.appendChild(card);
+    updateAlg2Headers();
+    updateAlg2AddBtn();
+    showAlg2Page(getAlg2Cards().length - 1);
+  }
+
   addSegmentBtn.addEventListener("click", () => addSegment());
   document.getElementById("prevSegBtn").addEventListener("click", () => showPage(currentSegIdx - 1));
   document.getElementById("nextSegBtn").addEventListener("click", () => showPage(currentSegIdx + 1));
 
-  renderAlgorithm2Survey();
+  addAlg2SurveyBtn.addEventListener("click", () => addAlgorithm2Survey());
+  document.getElementById("prevAlg2Btn").addEventListener("click", () => showAlg2Page(currentAlg2Idx - 1));
+  document.getElementById("nextAlg2Btn").addEventListener("click", () => showAlg2Page(currentAlg2Idx + 1));
 
   // 시나리오 3개 × 적용 전/후 = 6개 미리 생성
   [1, 2, 3].forEach(sc => ["적용 전", "적용 후"].forEach(stage => addSegment({ scenario: sc, stage })));
   showPage(0);
+
+  // 시나리오 3 × 적용 전/후 = 2개 미리 생성
+  ALGORITHM2_INITIAL_SURVEYS.forEach(survey => addAlgorithm2Survey(survey));
+  showAlg2Page(0);
 
   // 미응답 경고 처리
   document.getElementById("warnConfirm").addEventListener("click", () => {
@@ -1002,6 +1125,7 @@
     if (!participantInfo.participantGender) { showError("참가자 성별을 선택해 주세요."); return; }
 
     const cards = getCards();
+    const alg2Cards = getAlg2Cards();
 
     for (const card of cards) {
       const id = card.dataset.segId;
@@ -1010,6 +1134,16 @@
       if (!scenario || !stage) {
         showError("모든 설문에서 시나리오와 단계를 선택해 주세요.");
         showPage(cards.indexOf(card));
+        return;
+      }
+    }
+
+    for (const card of alg2Cards) {
+      const id = card.dataset.alg2Id;
+      const stage = document.querySelector(`input[name="alg2${id}_stage"]:checked`);
+      if (!stage) {
+        showError("모든 설문에서 시나리오와 단계를 선택해 주세요.");
+        showAlg2Page(alg2Cards.indexOf(card));
         return;
       }
     }
@@ -1026,14 +1160,23 @@
       if (unansweredCard) break;
     }
 
-    const hasUnansweredAlgorithm2 = ALGORITHM2_QUESTIONS.some(q => getQuestionValue(`algorithm2_${q.key}`) === null);
+    let unansweredAlg2Card = null;
+    for (const card of alg2Cards) {
+      const id = card.dataset.alg2Id;
+      for (const q of ALGORITHM2_QUESTIONS) {
+        if (!document.querySelector(`input[name="alg2${id}_${q.key}"]:checked`)) {
+          unansweredAlg2Card = card; break;
+        }
+      }
+      if (unansweredAlg2Card) break;
+    }
 
-    if (unansweredCard || hasUnansweredAlgorithm2) {
+    if (unansweredCard || unansweredAlg2Card) {
       warnBanner.style.display = "block";
       if (unansweredCard) {
         showPage(cards.indexOf(unansweredCard));
       } else {
-        algorithm2Survey.scrollIntoView({ block: "center" });
+        showAlg2Page(alg2Cards.indexOf(unansweredAlg2Card));
       }
       return;
     }
@@ -1045,6 +1188,7 @@
     const participantInfo = getParticipantInfo();
     const timestamp = new Date().toISOString();
     const cards = getCards();
+    const alg2Cards = getAlg2Cards();
 
     const records = [];
     for (const [index, card] of cards.entries()) {
@@ -1076,21 +1220,25 @@
       records.push(entry);
     }
 
-    const algorithm2Entry = {
-      ...participantInfo,
-      algorithm: "알고리즘 2",
-      surveyNumber: "",
-      scenario: null,
-      stage: null,
-      timestamp,
-      q1: getQuestionValue("algorithm2_q1"),
-      q2: getQuestionValue("algorithm2_q2"),
-      q3: null,
-      q2_env: null,
-      q2_env_other: null,
-      comment: (document.getElementById("algorithm2_comment").value || "").trim(),
-    };
-    records.push(algorithm2Entry);
+    for (const [index, card] of alg2Cards.entries()) {
+      const id = card.dataset.alg2Id;
+      const scenario = parseInt(document.querySelector(`input[name="alg2${id}_scenario"]:checked`).value);
+      const stage = document.querySelector(`input[name="alg2${id}_stage"]:checked`).value;
+      records.push({
+        ...participantInfo,
+        algorithm: "알고리즘 2",
+        surveyNumber: index + 1,
+        scenario,
+        stage,
+        timestamp,
+        q1: getQuestionValue(`alg2${id}_q1`),
+        q2: getQuestionValue(`alg2${id}_q2`),
+        q3: null,
+        q2_env: null,
+        q2_env_other: null,
+        comment: (document.getElementById(`alg2${id}_comment`).value || "").trim(),
+      });
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
