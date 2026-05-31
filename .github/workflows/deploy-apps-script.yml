@@ -1,0 +1,59 @@
+name: Deploy Apps Script
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps-script/**"
+      - ".github/workflows/deploy-apps-script.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup clasp credentials
+        shell: bash
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+          CLASP_SCRIPT_ID: ${{ secrets.CLASP_SCRIPT_ID }}
+          APPS_SCRIPT_DEPLOYMENT_ID: ${{ secrets.APPS_SCRIPT_DEPLOYMENT_ID }}
+        run: |
+          if [ -z "$CLASPRC_JSON" ]; then
+            echo "Missing GitHub secret: CLASPRC_JSON"
+            exit 1
+          fi
+
+          if [ -z "$CLASP_SCRIPT_ID" ]; then
+            echo "Missing GitHub secret: CLASP_SCRIPT_ID"
+            exit 1
+          fi
+
+          printf '%s' "$CLASPRC_JSON" > ~/.clasprc.json
+          printf '{"scriptId":"%s","rootDir":"apps-script"}\n' "$CLASP_SCRIPT_ID" > .clasp.json
+
+          if [ -n "$APPS_SCRIPT_DEPLOYMENT_ID" ]; then
+            echo "HAS_APPS_SCRIPT_DEPLOYMENT_ID=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Push Apps Script project
+        run: npx @google/clasp@latest push --force
+
+      - name: Update web app deployment
+        if: env.HAS_APPS_SCRIPT_DEPLOYMENT_ID == 'true'
+        env:
+          APPS_SCRIPT_DEPLOYMENT_ID: ${{ secrets.APPS_SCRIPT_DEPLOYMENT_ID }}
+        run: npx @google/clasp@latest create-deployment --deploymentId "$APPS_SCRIPT_DEPLOYMENT_ID" --description "GitHub ${GITHUB_SHA::7}"
+
+      - name: Deployment note
+        if: env.HAS_APPS_SCRIPT_DEPLOYMENT_ID != 'true'
+        run: echo "APPS_SCRIPT_DEPLOYMENT_ID is not set, so only the Apps Script source was pushed."

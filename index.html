@@ -43,8 +43,13 @@
       color: #718096;
     }
 
-    /* 참가자 ID */
+    /* 참가자 정보 */
     .id-section { margin-bottom: 28px; }
+    .participant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
     .id-section label {
       display: block;
       font-size: 0.9rem;
@@ -52,17 +57,31 @@
       color: #4a5568;
       margin-bottom: 8px;
     }
-    .id-section input {
+    .id-section input,
+    .id-section select {
       width: 100%;
       padding: 11px 16px;
       border: 2px solid #e2e8f0;
       border-radius: 10px;
       font-size: 1rem;
+      font-family: inherit;
       color: #2d3748;
+      background: #fff;
       outline: none;
       transition: border-color 0.2s;
     }
-    .id-section input:focus { border-color: #667eea; }
+    .id-section input:focus,
+    .id-section select:focus { border-color: #667eea; }
+
+    .survey-section-heading {
+      margin-bottom: 16px;
+    }
+
+    .survey-section-heading h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
 
     /* 구분선 */
     .divider {
@@ -71,7 +90,7 @@
       margin: 28px 0;
     }
 
-    /* 세그먼트 탭 */
+    /* 설문 탭 */
     .seg-tabs-wrap {
       display: flex;
       align-items: center;
@@ -121,7 +140,7 @@
     .add-segment-btn-sm:hover { background: #ebf4ff; border-color: #667eea; }
     .add-segment-btn-sm:disabled { color: #a0aec0; border-color: #e2e8f0; cursor: not-allowed; background: #fff; }
 
-    /* 세그먼트 페이지 네비게이션 */
+    /* 설문 페이지 네비게이션 */
     .seg-nav {
       display: flex;
       align-items: center;
@@ -149,7 +168,7 @@
       color: #718096;
     }
 
-    /* 세그먼트 카드 */
+    /* 설문 카드 */
     .segment-card {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -197,7 +216,7 @@
     }
     .remove-btn:hover { background: #fed7d7; color: #c53030; }
 
-    /* 세그먼트 내 선택기 행 */
+    /* 설문 내 선택기 행 */
     .seg-selectors {
       display: flex;
       gap: 20px;
@@ -402,7 +421,7 @@
     .comment-block textarea:focus { border-color: #667eea; }
     .comment-block textarea::placeholder { color: #a0aec0; }
 
-    /* 세그먼트 추가 버튼 */
+    /* 설문 추가 버튼 */
     .add-segment-btn {
       display: flex;
       align-items: center;
@@ -470,6 +489,14 @@
       color: #e53e3e;
       font-size: 0.9rem;
       margin-top: 12px;
+    }
+
+    .algorithm2-section {
+      margin: 30px 0 24px;
+    }
+
+    .algorithm2-card {
+      display: block;
     }
 
     /* 가이드라인 배너 */
@@ -594,6 +621,7 @@
 
     @media (max-width: 540px) {
       .card { padding: 28px 16px; }
+      .participant-grid { grid-template-columns: 1fr; }
       .segment-card { padding: 18px 16px; }
       .seg-selectors { flex-direction: column; gap: 14px; }
       .likert { gap: 4px; }
@@ -616,12 +644,12 @@
     <div class="guide-section">
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
-        <li><strong>참가자 ID</strong>를 먼저 입력해 주세요. (예: 김이름)</li>
-        <li>아래 <strong>세그먼트 추가</strong> 버튼을 눌러 평가할 영상 세그먼트를 추가하세요. (최대 6개)</li>
-        <li>각 세그먼트마다 <strong>시나리오 번호</strong>와 <strong>단계 (적용 전/후)</strong>를 선택해 주세요.</li>
-        <li>Q1~Q4 각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
+        <li><strong>참가자 이름, 생년월일, 성별</strong>을 먼저 입력해 주세요.</li>
+        <li>아래 <strong>설문 추가</strong> 버튼을 눌러 평가할 영상 설문을 추가하세요. (최대 6개)</li>
+        <li>알고리즘 1의 각 설문마다 <strong>시나리오 번호</strong>와 <strong>단계 (적용 전/후)</strong>를 선택해 주세요.</li>
+        <li>각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
         <li>자유 의견란은 선택 사항입니다. 느낀 점을 자유롭게 작성하셔도 됩니다.</li>
-        <li>모든 세그먼트 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
+        <li>알고리즘 1과 알고리즘 2 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
       </ol>
     </div>
 
@@ -649,21 +677,43 @@
   </div>
 
   <form id="surveyForm">
-    <!-- 참가자 ID -->
+    <!-- 참가자 정보 -->
     <div class="id-section">
-      <label for="userId">참가자 ID</label>
-      <input type="text" id="userId" placeholder="예: P001" autocomplete="off" />
+      <div class="participant-grid">
+        <div class="participant-field">
+          <label for="participantName">참가자 이름</label>
+          <input type="text" id="participantName" placeholder="예: 김이름" autocomplete="name" />
+        </div>
+        <div class="participant-field">
+          <label for="participantBirthDate">참가자 생년월일</label>
+          <input type="date" id="participantBirthDate" autocomplete="bday" />
+        </div>
+        <div class="participant-field">
+          <label for="participantGender">참가자 성별</label>
+          <select id="participantGender" autocomplete="sex">
+            <option value="">선택해 주세요</option>
+            <option value="남성">남성</option>
+            <option value="여성">여성</option>
+            <option value="기타">기타</option>
+            <option value="응답하지 않음">응답하지 않음</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <hr class="divider" />
 
-    <!-- 세그먼트 탭 + 추가 버튼 -->
-    <div class="seg-tabs-wrap">
-      <div class="seg-tabs" id="segTabs"></div>
-      <button type="button" class="add-segment-btn-sm" id="addSegmentBtn" title="세그먼트 추가">+</button>
+    <div class="survey-section-heading">
+      <h2>알고리즘 1 설문</h2>
     </div>
 
-    <!-- 세그먼트 목록 (한 번에 하나씩 표시) -->
+    <!-- 설문 탭 + 추가 버튼 -->
+    <div class="seg-tabs-wrap">
+      <div class="seg-tabs" id="segTabs"></div>
+      <button type="button" class="add-segment-btn-sm" id="addSegmentBtn" title="설문 추가">+</button>
+    </div>
+
+    <!-- 설문 목록 (한 번에 하나씩 표시) -->
     <div id="segmentList"></div>
 
     <!-- 페이지 네비게이션 -->
@@ -673,9 +723,18 @@
       <button type="button" class="seg-nav-btn" id="nextSegBtn">다음 →</button>
     </div>
 
+    <hr class="divider" />
+
+    <section class="algorithm2-section" aria-labelledby="algorithm2Title">
+      <div class="survey-section-heading">
+        <h2 id="algorithm2Title">알고리즘 2 설문</h2>
+      </div>
+      <div class="segment-card active algorithm2-card" id="algorithm2Survey"></div>
+    </section>
+
     <!-- 경고 배너 -->
     <div class="warn-banner" id="warnBanner">
-      ⚠️ 일부 문항에 응답하지 않은 세그먼트가 있습니다. 그래도 제출하시겠습니까?
+      ⚠️ 일부 문항에 응답하지 않은 설문이 있습니다. 그래도 제출하시겠습니까?
       <div class="warn-actions">
         <button type="button" class="warn-confirm-btn" id="warnConfirm">그래도 제출</button>
         <button type="button" class="warn-cancel-btn" id="warnCancel">돌아가기</button>
@@ -708,6 +767,11 @@
     //{ key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느껴졌다." }, 
   ];
 
+  const ALGORITHM2_QUESTIONS = [
+    { key: "q1", text: "오브젝트의 이동이 끊김 없이 부드럽고 자연스럽게 보였다." },
+    { key: "q2", text: "오브젝트의 튐, 멈칫거림, 갑작스러운 위치 변화가 적었다." },
+  ];
+
   const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
 
   let segCounter = 0;
@@ -718,6 +782,52 @@
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
   const warnBanner = document.getElementById("warnBanner");
+  const algorithm2Survey = document.getElementById("algorithm2Survey");
+
+  function getParticipantInfo() {
+    return {
+      participantName: document.getElementById("participantName").value.trim(),
+      participantBirthDate: document.getElementById("participantBirthDate").value,
+      participantGender: document.getElementById("participantGender").value,
+    };
+  }
+
+  function renderLikertOptions(name, idPrefix) {
+    return [1,2,3,4,5].map(v => `
+      <div class="likert-option">
+        <input type="radio" name="${name}" id="${idPrefix}_${v}" value="${v}" />
+        <label for="${idPrefix}_${v}">
+          <span class="score-num">${v}</span>
+          <span class="score-text">${LIKERT_LABELS[v-1]}</span>
+        </label>
+      </div>
+    `).join("");
+  }
+
+  function renderAlgorithm2Survey() {
+    algorithm2Survey.innerHTML = `
+      ${ALGORITHM2_QUESTIONS.map((q, qi) => `
+        <div class="question-block">
+          <div class="question-label">
+            <span class="question-num">Q${qi + 1}</span>${q.text}
+          </div>
+          <div class="likert">
+            ${renderLikertOptions(`algorithm2_${q.key}`, `algorithm2_${q.key}`)}
+          </div>
+        </div>
+      `).join("")}
+
+      <div class="comment-block">
+        <label for="algorithm2_comment">자유 의견 (선택)</label>
+        <textarea id="algorithm2_comment" name="algorithm2_comment" placeholder="알고리즘 2에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+      </div>
+    `;
+  }
+
+  function getQuestionValue(name) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? parseInt(checked.value) : null;
+  }
 
   function getCards() {
     return [...segmentList.querySelectorAll(".segment-card")];
@@ -732,7 +842,7 @@
     const tabs = document.getElementById("segTabs");
     tabs.innerHTML = cards.map((_, i) => `
       <button type="button" class="seg-tab${i === currentSegIdx ? " active" : ""}" data-idx="${i}">
-        세그먼트 ${i + 1}
+        설문 ${i + 1}
       </button>
     `).join("");
     tabs.querySelectorAll(".seg-tab").forEach(btn => {
@@ -754,7 +864,7 @@
   function updateSegmentHeaders() {
     const cards = getCards();
     cards.forEach((card, i) => {
-      card.querySelector(".seg-index").textContent = `세그먼트 ${i + 1}`;
+      card.querySelector(".seg-index").textContent = `설문 ${i + 1}`;
       const rmBtn = card.querySelector(".remove-btn");
       rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
     });
@@ -771,7 +881,7 @@
     card.innerHTML = `
       <div class="segment-card-header">
         <span class="segment-title"><span class="seg-index"></span></span>
-        <button type="button" class="remove-btn" title="이 세그먼트 삭제">✕</button>
+        <button type="button" class="remove-btn" title="이 설문 삭제">✕</button>
       </div>
 
       <div class="seg-selectors">
@@ -836,7 +946,7 @@
 
       <div class="comment-block">
         <label for="seg${id}_comment">자유 의견 (선택)</label>
-        <textarea id="seg${id}_comment" name="seg${id}_comment" placeholder="이 세그먼트에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+        <textarea id="seg${id}_comment" name="seg${id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
       </div>
     `;
 
@@ -866,6 +976,8 @@
   document.getElementById("prevSegBtn").addEventListener("click", () => showPage(currentSegIdx - 1));
   document.getElementById("nextSegBtn").addEventListener("click", () => showPage(currentSegIdx + 1));
 
+  renderAlgorithm2Survey();
+
   // 시나리오 3개 × 적용 전/후 = 6개 미리 생성
   [1, 2, 3].forEach(sc => ["적용 전", "적용 후"].forEach(stage => addSegment({ scenario: sc, stage })));
   showPage(0);
@@ -884,8 +996,10 @@
     warnBanner.style.display = "none";
     hideError();
 
-    const userId = document.getElementById("userId").value.trim();
-    if (!userId) { showError("참가자 ID를 입력해 주세요."); return; }
+    const participantInfo = getParticipantInfo();
+    if (!participantInfo.participantName) { showError("참가자 이름을 입력해 주세요."); return; }
+    if (!participantInfo.participantBirthDate) { showError("참가자 생년월일을 입력해 주세요."); return; }
+    if (!participantInfo.participantGender) { showError("참가자 성별을 선택해 주세요."); return; }
 
     const cards = getCards();
 
@@ -894,7 +1008,7 @@
       const scenario = document.querySelector(`input[name="seg${id}_scenario"]:checked`);
       const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`);
       if (!scenario || !stage) {
-        showError("모든 세그먼트에서 시나리오와 단계를 선택해 주세요.");
+        showError("모든 설문에서 시나리오와 단계를 선택해 주세요.");
         showPage(cards.indexOf(card));
         return;
       }
@@ -912,9 +1026,15 @@
       if (unansweredCard) break;
     }
 
-    if (unansweredCard) {
+    const hasUnansweredAlgorithm2 = ALGORITHM2_QUESTIONS.some(q => getQuestionValue(`algorithm2_${q.key}`) === null);
+
+    if (unansweredCard || hasUnansweredAlgorithm2) {
       warnBanner.style.display = "block";
-      showPage(cards.indexOf(unansweredCard));
+      if (unansweredCard) {
+        showPage(cards.indexOf(unansweredCard));
+      } else {
+        algorithm2Survey.scrollIntoView({ block: "center" });
+      }
       return;
     }
 
@@ -922,16 +1042,23 @@
   });
 
   async function doSubmit() {
-    const userId = document.getElementById("userId").value.trim();
+    const participantInfo = getParticipantInfo();
     const timestamp = new Date().toISOString();
     const cards = getCards();
 
     const records = [];
-    for (const card of cards) {
+    for (const [index, card] of cards.entries()) {
       const id = card.dataset.segId;
       const scenario = parseInt(document.querySelector(`input[name="seg${id}_scenario"]:checked`).value);
       const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`).value;
-      const entry = { userId, scenario, stage, timestamp };
+      const entry = {
+        ...participantInfo,
+        algorithm: "알고리즘 1",
+        surveyNumber: index + 1,
+        scenario,
+        stage,
+        timestamp,
+      };
       for (const q of QUESTIONS) {
         const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
@@ -948,6 +1075,22 @@
       entry.comment = (card.querySelector(`textarea[name="seg${id}_comment"]`).value || "").trim();
       records.push(entry);
     }
+
+    const algorithm2Entry = {
+      ...participantInfo,
+      algorithm: "알고리즘 2",
+      surveyNumber: "",
+      scenario: null,
+      stage: null,
+      timestamp,
+      q1: getQuestionValue("algorithm2_q1"),
+      q2: getQuestionValue("algorithm2_q2"),
+      q3: null,
+      q2_env: null,
+      q2_env_other: null,
+      comment: (document.getElementById("algorithm2_comment").value || "").trim(),
+    };
+    records.push(algorithm2Entry);
 
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
