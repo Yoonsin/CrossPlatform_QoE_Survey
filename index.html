@@ -495,6 +495,20 @@
       margin: 30px 0 24px;
     }
 
+    .scenario-survey-section {
+      margin-bottom: 30px;
+    }
+
+    .scenario-survey-section:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .fixed-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #4a5568;
+    }
+
     .seg-control input[type="radio"]:disabled + label {
       cursor: default;
     }
@@ -650,39 +664,39 @@
     <div class="guide-section">
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
-        <li><strong>참가자 이름, 생년월일, 성별</strong>을 먼저 입력해 주세요.</li>
-        <li>아래 <strong>설문 추가</strong> 버튼을 눌러 평가할 영상 설문을 추가하세요. (최대 6개)</li>
-        <li>알고리즘 1과 알고리즘 2의 각 설문마다 <strong>시나리오 번호</strong>와 <strong>단계 (적용 전/후)</strong>가 표시되어 있습니다.</li>
+        <li><strong>참가자 ID, 생년, 성별</strong>을 먼저 입력해 주세요.</li>
+        <li>시나리오별로 고정된 설문을 순서대로 응답해 주세요.</li>
+        <li>각 설문마다 <strong>시나리오 번호</strong>, <strong>알고리즘</strong>, <strong>단계 (적용 전/후)</strong>가 표시되어 있습니다.</li>
         <li>각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
         <li>자유 의견란은 선택 사항입니다. 느낀 점을 자유롭게 작성하셔도 됩니다.</li>
-        <li>알고리즘 1과 알고리즘 2 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
+        <li>모든 시나리오 설문 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
       </ol>
     </div>
 
     <div class="guide-section">
       <div class="guide-section-title">🎮 시나리오 설명</div>
       <ul class="guide-scenario-list">
-        <li><span class="sc-label">시나리오 1</span>표적이 항상 조준점에 스폰되며, 움직이지 않습니다.</li>
-        <li><span class="sc-label">시나리오 2</span>표적이 화면 안 랜덤한 위치에 스폰되며, 움직이지 않습니다.</li>
-        <li><span class="sc-label">시나리오 3</span>표적이 화면 밖의 랜덤한 위치에 스폰되며, 랜덤한 속도로 좌우로 움직입니다.</li>
-        <!-- <li><span class="sc-label">시나리오 2</span>모바일은 왼쪽, PC는 오른쪽에 있으며 각자 다른 목표를 사격합니다.<br><strong>두 플레이어 모두</strong> 목표 점수 10점을 채우면 게임이 종료됩니다. -->
-</li>
+        <li><span class="sc-label">시나리오 1</span>표적이 화면 안 랜덤한 위치에 스폰되며, 움직이지 않습니다.</li>
+        <li><span class="sc-label">시나리오 2</span>표적이 화면 안의 랜덤한 위치에 스폰되며, 랜덤한 속도로 좌우로 움직입니다.</li>
+        <li><span class="sc-label">시나리오 3</span>표적이 화면 안의 고정된 위치에 스폰되며, 고정된 속도로 좌우로 움직입니다.</li>
       </ul>
       <ul class="guide-notes">
-        <li><strong>공통</strong></li>
+        <br>
+        <li><strong>시나리오 1,2</strong></li>
         <li>처음 실험하는 경우, 각 시나리오 플레이 전 튜토리얼을 한 번씩 진행합니다.</li>
-        <li><strong>알고리즘 1</strong></li>
-        <li>시나리오 1,2,3 모두 두 플레이어는 <strong>경쟁하는 입장 </strong>입니다. </li>
-        <li>또한 두 플레이어는 같은 위치에 있으며, 같은 목표를 사격합니다. </li>
-        <li>한 플레이어라도 <strong>목표 점수 10점</strong>을 채우면 게임이 종료됩니다. </li>
-        <li>목표는 게임이 끝날 때까지 <strong>내 플레이어가 최대한 점수를 많이 채우는 것입니다.</strong></li>
-        <li>매 표적이 스폰되는 시간과 이동 속도는 랜덤하게 달라집니다.</li>
+        <li>플레이어와 봇은 서로 <strong> 경쟁하는 입장 </strong>입니다. </li>
+        <li>또한 플레이어와 봇은 서로 좌우로 떨어진 위치에 있으며, 각자 주어지는 표적을 사격합니다. </li>
+        <li>게임이 시작되면 화면 왼쪽 위에 <strong>제한시간 60초</strong> 타이머가 나타나며 제한시간이 지나면 게임이 종료됩니다. </li>
+        <li>목표는 게임이 끝날 때까지 <strong>자신의 점수를 최대한 많이 채우는 것입니다.</strong></li>
         <li>표적 사격 시 이펙트가 발생하며, 모바일은 <strong>빨간색</strong>, PC는 <strong>파란색</strong>으로 표시됩니다.</li>
         <li>(*플레이어의 사격 이펙트는 실제로 점수를 득점했을 때만 발생합니다.)</li>
         <li>화면 위쪽 점수판에서 자신의 점수는 항상 <strong>왼쪽</strong>에 표시됩니다.</li>
-        <li><strong>알고리즘 2</strong></li>
-        <li>매 표적이 스폰되는 시간과 이동 속도는 일정하게 유지됩니다.</li>
-        <li>표적이 이동하는 모습을 계속 확인하며, 서버 기준으로 10초가 경과하면 게임이 종료됩니다.</li>
+        <br>
+        <li><strong>시나리오 3</strong></li>
+        <li>시나리오 3에서는 표적이 화면 안의 고정된 위치에 스폰되며, 고정된 속도로 좌우로 움직입니다.</li>
+        <li>플레이어는 화면을 관찰하기만 하면 됩니다.</li>
+        <li>게임이 시작되면 화면 왼쪽 위에 <strong>제한시간 30초</strong> 타이머가 나타나며 제한시간이 지나면 게임이 종료됩니다. </li>
+        <br>
       </ul>
     </div>
   </div>
@@ -692,15 +706,15 @@
     <div class="id-section">
       <div class="participant-grid">
         <div class="participant-field">
-          <label for="participantName">참가자 이름</label>
-          <input type="text" id="participantName" placeholder="예: 김이름" autocomplete="name" />
+          <label for="participantId">참가자 ID</label>
+          <input type="text" id="participantId" placeholder="예: P001" autocomplete="off" />
         </div>
         <div class="participant-field">
-          <label for="participantBirthDate">참가자 생년월일</label>
-          <input type="date" id="participantBirthDate" autocomplete="bday" />
+          <label for="participantBirthYear">생년</label>
+          <input type="number" id="participantBirthYear" placeholder="예: 2000" min="1900" max="2100" inputmode="numeric" autocomplete="bday-year" />
         </div>
         <div class="participant-field">
-          <label for="participantGender">참가자 성별</label>
+          <label for="participantGender">성별</label>
           <select id="participantGender" autocomplete="sex">
             <option value="">선택해 주세요</option>
             <option value="남성">남성</option>
@@ -714,49 +728,7 @@
 
     <hr class="divider" />
 
-    <div class="survey-section-heading">
-      <h2>알고리즘 1 설문</h2>
-    </div>
-
-    <!-- 설문 탭 + 추가 버튼 -->
-    <div class="seg-tabs-wrap">
-      <div class="seg-tabs" id="segTabs"></div>
-      <button type="button" class="add-segment-btn-sm" id="addSegmentBtn" title="설문 추가">+</button>
-    </div>
-
-    <!-- 설문 목록 (한 번에 하나씩 표시) -->
-    <div id="segmentList"></div>
-
-    <!-- 페이지 네비게이션 -->
-    <div class="seg-nav">
-      <button type="button" class="seg-nav-btn" id="prevSegBtn">← 이전</button>
-      <span class="seg-page-indicator" id="segPageIndicator">1 / 1</span>
-      <button type="button" class="seg-nav-btn" id="nextSegBtn">다음 →</button>
-    </div>
-
-    <hr class="divider" />
-
-    <section class="algorithm2-section" aria-labelledby="algorithm2Title">
-      <div class="survey-section-heading">
-        <h2 id="algorithm2Title">알고리즘 2 설문</h2>
-      </div>
-
-      <!-- 설문 탭 + 추가 버튼 -->
-      <div class="seg-tabs-wrap">
-        <div class="seg-tabs" id="alg2Tabs"></div>
-        <button type="button" class="add-segment-btn-sm" id="addAlg2SurveyBtn" title="설문 추가">+</button>
-      </div>
-
-      <!-- 설문 목록 (한 번에 하나씩 표시) -->
-      <div id="algorithm2List"></div>
-
-      <!-- 페이지 네비게이션 -->
-      <div class="seg-nav">
-        <button type="button" class="seg-nav-btn" id="prevAlg2Btn">← 이전</button>
-        <span class="seg-page-indicator" id="alg2PageIndicator">1 / 1</span>
-        <button type="button" class="seg-nav-btn" id="nextAlg2Btn">다음 →</button>
-      </div>
-    </section>
+    <div id="scenarioSurveySections"></div>
 
     <!-- 경고 배너 -->
     <div class="warn-banner" id="warnBanner">
@@ -784,35 +756,33 @@
   });
 
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmMFThoYEJ_k0qESDcPI6MVHtQ9zyPo5k2dGMNj2UYDocmzYc-fWWv5f-WZsigrriEmQ/exec";
-  const MAX_SEGMENTS = 6;
-
-  const QUESTIONS = [
-    { key: "q1", text: "나의 사격에 대한 입력 반응 전반이 느리거나 부자연스럽게 느껴졌다." },
-    { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다." },
-    { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느껴졌다." },
-    //{ key: "q4", text: "목표 달성에 본인이 충분히 기여했다고 느껴졌다." }, 
-  ];
-
-  const ALGORITHM2_QUESTIONS = [
-    { key: "q1", text: "오브젝트의 이동이 끊김 없이 부드럽고 자연스럽게 보였다." },
-    { key: "q2", text: "오브젝트의 튐, 멈칫거림, 갑작스러운 위치 변화가 적었다." },
-  ];
-
-  const ALGORITHM2_INITIAL_SURVEYS = [
-    { stage: "적용 전" },
-    { stage: "적용 후" },
-  ];
 
   const LIKERT_LABELS = ["전혀<br>그렇지 않다", "그렇지<br>않다", "보통<br>이다", "그렇다", "매우<br>그렇다"];
 
-  let segCounter = 0;
-  let currentSegIdx = 0;
-  let alg2Counter = 0;
-  let currentAlg2Idx = 0;
-  const segmentList = document.getElementById("segmentList");
-  const addSegmentBtn = document.getElementById("addSegmentBtn");
-  const algorithm2List = document.getElementById("algorithm2List");
-  const addAlg2SurveyBtn = document.getElementById("addAlg2SurveyBtn");
+  const QUESTION_SETS = {
+    algorithm1: [
+      { key: "q1", text: "나의 사격에 대한 입력 반응 전반이 느리거나 부자연스럽게 느껴졌다." },
+      { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다." },
+      { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느껴졌다." },
+    ],
+    algorithm2: [
+      { key: "q1", text: "오브젝트의 이동이 끊김 없이 부드럽고 자연스럽게 보였다." },
+      { key: "q2", text: "오브젝트의 튐, 멈칫거림, 갑작스러운 위치 변화가 적었다." },
+    ],
+  };
+
+  const FIXED_SURVEYS = [
+    { id: 1, scenario: 1, algorithm: "알고리즘 1", stage: "적용 전", questionSet: "algorithm1", label: "알고리즘 1 적용 전" },
+    { id: 2, scenario: 1, algorithm: "알고리즘 1", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 1 적용 후" },
+    { id: 3, scenario: 2, algorithm: "알고리즘 1,2", stage: "적용 전", questionSet: "algorithm1", label: "알고리즘 1,2 적용 전" },
+    { id: 4, scenario: 2, algorithm: "알고리즘 1", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 1 적용 후" },
+    { id: 5, scenario: 2, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 2 적용 후" },
+    { id: 6, scenario: 3, algorithm: "알고리즘 2", stage: "적용 전", questionSet: "algorithm2", label: "알고리즘 2 적용 전" },
+    { id: 7, scenario: 3, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm2", label: "알고리즘 2 적용 후" },
+  ];
+
+  const scenarioState = { 1: 0, 2: 0, 3: 0 };
+  const scenarioSurveySections = document.getElementById("scenarioSurveySections");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
@@ -820,8 +790,8 @@
 
   function getParticipantInfo() {
     return {
-      participantName: document.getElementById("participantName").value.trim(),
-      participantBirthDate: document.getElementById("participantBirthDate").value,
+      participantId: document.getElementById("participantId").value.trim(),
+      participantBirthYear: document.getElementById("participantBirthYear").value.trim(),
       participantGender: document.getElementById("participantGender").value,
     };
   }
@@ -843,272 +813,171 @@
     return checked ? parseInt(checked.value) : null;
   }
 
-  function getCards() {
-    return [...segmentList.querySelectorAll(".segment-card")];
+  function getSurveysByScenario(scenario) {
+    return FIXED_SURVEYS.filter(survey => survey.scenario === scenario);
   }
 
-  function updateAddBtn() {
-    addSegmentBtn.disabled = getCards().length >= MAX_SEGMENTS;
+  function getSurveyCard(surveyId) {
+    return document.querySelector(`[data-survey-id="${surveyId}"]`);
   }
 
-  function renderTabs() {
-    const cards = getCards();
-    const tabs = document.getElementById("segTabs");
-    tabs.innerHTML = cards.map((_, i) => `
-      <button type="button" class="seg-tab${i === currentSegIdx ? " active" : ""}" data-idx="${i}">
-        설문 ${i + 1}
+  function renderScenarioSections() {
+    scenarioSurveySections.innerHTML = [1, 2, 3].map((scenario, index) => `
+      ${index > 0 ? `<hr class="divider" />` : ""}
+      <section class="scenario-survey-section" data-scenario-section="${scenario}">
+        <div class="survey-section-heading">
+          <h2>시나리오 ${scenario} 설문</h2>
+        </div>
+
+        <div class="seg-tabs-wrap">
+          <div class="seg-tabs" id="scenario${scenario}Tabs"></div>
+        </div>
+
+        <div id="scenario${scenario}SurveyList">
+          ${getSurveysByScenario(scenario).map(renderSurveyCard).join("")}
+        </div>
+
+        <div class="seg-nav">
+          <button type="button" class="seg-nav-btn" id="prevScenario${scenario}Btn">← 이전</button>
+          <span class="seg-page-indicator" id="scenario${scenario}PageIndicator">1 / 1</span>
+          <button type="button" class="seg-nav-btn" id="nextScenario${scenario}Btn">다음 →</button>
+        </div>
+      </section>
+    `).join("");
+
+    [1, 2, 3].forEach(scenario => {
+      document.getElementById(`prevScenario${scenario}Btn`).addEventListener("click", () => {
+        showScenarioPage(scenario, scenarioState[scenario] - 1);
+      });
+      document.getElementById(`nextScenario${scenario}Btn`).addEventListener("click", () => {
+        showScenarioPage(scenario, scenarioState[scenario] + 1);
+      });
+      renderScenarioTabs(scenario);
+      showScenarioPage(scenario, 0);
+    });
+
+    attachQuestionHandlers();
+  }
+
+  function renderSurveyCard(survey) {
+    const questions = QUESTION_SETS[survey.questionSet];
+    return `
+      <div class="segment-card" data-survey-id="${survey.id}" data-scenario="${survey.scenario}" data-question-set="${survey.questionSet}">
+        <div class="segment-card-header">
+          <span class="segment-title">
+            <span class="seg-index">설문 ${survey.id}</span>
+            <span class="fixed-card-title">${survey.label}</span>
+          </span>
+        </div>
+
+        <div class="seg-selectors">
+          <div class="seg-group">
+            <span class="seg-group-label">시나리오</span>
+            <div class="seg-control">
+              ${[1,2,3].map(n => `
+                <input type="radio" name="survey${survey.id}_scenario" id="survey${survey.id}_sc${n}" value="${n}" ${survey.scenario === n ? "checked" : ""} disabled />
+                <label for="survey${survey.id}_sc${n}">${n}</label>
+              `).join("")}
+            </div>
+          </div>
+          <div class="seg-group">
+            <span class="seg-group-label">알고리즘</span>
+            <div class="seg-control">
+              <input type="radio" name="survey${survey.id}_algorithm" id="survey${survey.id}_algorithm" value="${survey.algorithm}" checked disabled />
+              <label for="survey${survey.id}_algorithm">${survey.algorithm}</label>
+            </div>
+          </div>
+          <div class="seg-group">
+            <span class="seg-group-label">단계</span>
+            <div class="seg-control">
+              <input type="radio" name="survey${survey.id}_stage" id="survey${survey.id}_before" value="적용 전" ${survey.stage === "적용 전" ? "checked" : ""} disabled />
+              <label for="survey${survey.id}_before">적용 전</label>
+              <input type="radio" name="survey${survey.id}_stage" id="survey${survey.id}_after" value="적용 후" ${survey.stage === "적용 후" ? "checked" : ""} disabled />
+              <label for="survey${survey.id}_after">적용 후</label>
+            </div>
+          </div>
+        </div>
+
+        ${questions.map((q, qi) => `
+          <div class="question-block">
+            <div class="question-label">
+              <span class="question-num">Q${qi + 1}</span>${q.text}
+            </div>
+            <div class="likert">
+              ${renderLikertOptions(`survey${survey.id}_${q.key}`, `survey${survey.id}_${q.key}`)}
+            </div>
+            ${survey.questionSet === "algorithm1" && q.key === "q2" ? `
+            <div class="q2-followup" id="survey${survey.id}_q2followup">
+              <div class="q2-followup-label">
+                <span class="question-num">Q2-1</span>
+                어떤 환경 격차 때문인 것 같은지 생각하는 항목을 모두 선택해 주세요.
+              </div>
+              <div class="q2-checkbox-group">
+                <div class="q2-checkbox-option">
+                  <input type="checkbox" name="survey${survey.id}_q2env" id="survey${survey.id}_q2env_platform" value="플랫폼" />
+                  <label for="survey${survey.id}_q2env_platform">플랫폼</label>
+                </div>
+                <div class="q2-checkbox-option">
+                  <input type="checkbox" name="survey${survey.id}_q2env" id="survey${survey.id}_q2env_network" value="네트워크" />
+                  <label for="survey${survey.id}_q2env_network">네트워크</label>
+                </div>
+              </div>
+              <input type="text" class="q2-other-input" id="survey${survey.id}_q2env_other"
+                placeholder="그 외 — 직접 입력 (선택)" />
+            </div>
+            ` : ""}
+          </div>
+        `).join("")}
+
+        <div class="comment-block">
+          <label for="survey${survey.id}_comment">자유 의견 (선택)</label>
+          <textarea id="survey${survey.id}_comment" name="survey${survey.id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderScenarioTabs(scenario) {
+    const surveys = getSurveysByScenario(scenario);
+    const tabs = document.getElementById(`scenario${scenario}Tabs`);
+    tabs.innerHTML = surveys.map((survey, i) => `
+      <button type="button" class="seg-tab${i === scenarioState[scenario] ? " active" : ""}" data-scenario="${scenario}" data-idx="${i}">
+        ${survey.label}
       </button>
     `).join("");
     tabs.querySelectorAll(".seg-tab").forEach(btn => {
-      btn.addEventListener("click", () => showPage(parseInt(btn.dataset.idx)));
-    });
-    document.getElementById("segPageIndicator").textContent = `${currentSegIdx + 1} / ${cards.length}`;
-    document.getElementById("prevSegBtn").disabled = currentSegIdx === 0;
-    document.getElementById("nextSegBtn").disabled = currentSegIdx >= cards.length - 1;
-  }
-
-  function showPage(idx) {
-    const cards = getCards();
-    if (!cards.length) return;
-    currentSegIdx = Math.max(0, Math.min(idx, cards.length - 1));
-    cards.forEach((c, i) => c.classList.toggle("active", i === currentSegIdx));
-    renderTabs();
-  }
-
-  function updateSegmentHeaders() {
-    const cards = getCards();
-    cards.forEach((card, i) => {
-      card.querySelector(".seg-index").textContent = `설문 ${i + 1}`;
-      const rmBtn = card.querySelector(".remove-btn");
-      rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
+      btn.addEventListener("click", () => showScenarioPage(parseInt(btn.dataset.scenario), parseInt(btn.dataset.idx)));
     });
   }
 
-  function addSegment(preset = {}) {
-    if (getCards().length >= MAX_SEGMENTS) return;
-    const id = ++segCounter;
+  function showScenarioPage(scenario, idx) {
+    const surveys = getSurveysByScenario(scenario);
+    const nextIdx = Math.max(0, Math.min(idx, surveys.length - 1));
+    scenarioState[scenario] = nextIdx;
 
-    const card = document.createElement("div");
-    card.className = "segment-card";
-    card.dataset.segId = id;
-
-    card.innerHTML = `
-      <div class="segment-card-header">
-        <span class="segment-title"><span class="seg-index"></span></span>
-        <button type="button" class="remove-btn" title="이 설문 삭제">✕</button>
-      </div>
-
-      <div class="seg-selectors">
-        <div class="seg-group">
-          <span class="seg-group-label">시나리오</span>
-          <div class="seg-control">
-            ${[1,2,3].map(n => `
-              <input type="radio" name="seg${id}_scenario" id="seg${id}_sc${n}" value="${n}" ${preset.scenario == n ? "checked" : ""} />
-              <label for="seg${id}_sc${n}">${n}</label>
-            `).join("")}
-          </div>
-        </div>
-        <div class="seg-group">
-          <span class="seg-group-label">단계</span>
-          <div class="seg-control">
-            <input type="radio" name="seg${id}_stage" id="seg${id}_before" value="적용 전" ${preset.stage === "적용 전" ? "checked" : ""} />
-            <label for="seg${id}_before">적용 전</label>
-            <input type="radio" name="seg${id}_stage" id="seg${id}_after" value="적용 후" ${preset.stage === "적용 후" ? "checked" : ""} />
-            <label for="seg${id}_after">적용 후</label>
-          </div>
-        </div>
-      </div>
-
-      ${QUESTIONS.map((q, qi) => `
-        <div class="question-block">
-          <div class="question-label">
-            <span class="question-num">Q${qi + 1}</span>${q.text}
-          </div>
-          <div class="likert">
-            ${[1,2,3,4,5].map(v => `
-              <div class="likert-option">
-                <input type="radio" name="seg${id}_${q.key}" id="seg${id}_${q.key}_${v}" value="${v}" />
-                <label for="seg${id}_${q.key}_${v}">
-                  <span class="score-num">${v}</span>
-                  <span class="score-text">${LIKERT_LABELS[v-1]}</span>
-                </label>
-              </div>
-            `).join("")}
-          </div>
-          ${q.key === "q2" ? `
-          <div class="q2-followup" id="seg${id}_q2followup">
-            <div class="q2-followup-label">
-              <span class="question-num">Q2-1</span>
-              어떤 환경 격차 때문인지 해당하는 항목을 모두 선택해 주세요.
-            </div>
-            <div class="q2-checkbox-group">
-              <div class="q2-checkbox-option">
-                <input type="checkbox" name="seg${id}_q2env" id="seg${id}_q2env_platform" value="플랫폼" />
-                <label for="seg${id}_q2env_platform">플랫폼</label>
-              </div>
-              <div class="q2-checkbox-option">
-                <input type="checkbox" name="seg${id}_q2env" id="seg${id}_q2env_network" value="네트워크" />
-                <label for="seg${id}_q2env_network">네트워크</label>
-              </div>
-            </div>
-            <input type="text" class="q2-other-input" id="seg${id}_q2env_other"
-              placeholder="그 외 — 직접 입력 (선택)" />
-          </div>
-          ` : ""}
-        </div>
-      `).join("")}
-
-      <div class="comment-block">
-        <label for="seg${id}_comment">자유 의견 (선택)</label>
-        <textarea id="seg${id}_comment" name="seg${id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
-      </div>
-    `;
-
-    card.querySelector(".remove-btn").addEventListener("click", () => {
-      const allCards = getCards();
-      const idx = allCards.indexOf(card);
-      card.remove();
-      updateSegmentHeaders();
-      updateAddBtn();
-      showPage(Math.min(idx, getCards().length - 1));
+    surveys.forEach((survey, i) => {
+      getSurveyCard(survey.id).classList.toggle("active", i === nextIdx);
     });
 
-    card.querySelectorAll(`input[name="seg${id}_q2"]`).forEach(radio => {
-      radio.addEventListener("change", () => {
-        const followup = document.getElementById(`seg${id}_q2followup`);
-        followup.classList.toggle("visible", parseInt(radio.value) >= 2);
+    renderScenarioTabs(scenario);
+    document.getElementById(`scenario${scenario}PageIndicator`).textContent = `${nextIdx + 1} / ${surveys.length}`;
+    document.getElementById(`prevScenario${scenario}Btn`).disabled = nextIdx === 0;
+    document.getElementById(`nextScenario${scenario}Btn`).disabled = nextIdx >= surveys.length - 1;
+  }
+
+  function attachQuestionHandlers() {
+    FIXED_SURVEYS.forEach(survey => {
+      if (survey.questionSet !== "algorithm1") return;
+      document.querySelectorAll(`input[name="survey${survey.id}_q2"]`).forEach(radio => {
+        radio.addEventListener("change", () => {
+          const followup = document.getElementById(`survey${survey.id}_q2followup`);
+          followup.classList.toggle("visible", parseInt(radio.value) >= 2);
+        });
       });
     });
-
-    segmentList.appendChild(card);
-    updateSegmentHeaders();
-    updateAddBtn();
-    showPage(getCards().length - 1);
   }
 
-  function getAlg2Cards() {
-    return [...algorithm2List.querySelectorAll(".segment-card")];
-  }
-
-  function updateAlg2AddBtn() {
-    addAlg2SurveyBtn.disabled = getAlg2Cards().length >= MAX_SEGMENTS;
-  }
-
-  function renderAlg2Tabs() {
-    const cards = getAlg2Cards();
-    const tabs = document.getElementById("alg2Tabs");
-    tabs.innerHTML = cards.map((_, i) => `
-      <button type="button" class="seg-tab${i === currentAlg2Idx ? " active" : ""}" data-idx="${i}">
-        설문 ${i + 1}
-      </button>
-    `).join("");
-    tabs.querySelectorAll(".seg-tab").forEach(btn => {
-      btn.addEventListener("click", () => showAlg2Page(parseInt(btn.dataset.idx)));
-    });
-    document.getElementById("alg2PageIndicator").textContent = `${currentAlg2Idx + 1} / ${cards.length}`;
-    document.getElementById("prevAlg2Btn").disabled = currentAlg2Idx === 0;
-    document.getElementById("nextAlg2Btn").disabled = currentAlg2Idx >= cards.length - 1;
-  }
-
-  function showAlg2Page(idx) {
-    const cards = getAlg2Cards();
-    if (!cards.length) return;
-    currentAlg2Idx = Math.max(0, Math.min(idx, cards.length - 1));
-    cards.forEach((c, i) => c.classList.toggle("active", i === currentAlg2Idx));
-    renderAlg2Tabs();
-  }
-
-  function updateAlg2Headers() {
-    const cards = getAlg2Cards();
-    cards.forEach((card, i) => {
-      card.querySelector(".seg-index").textContent = `설문 ${i + 1}`;
-      const rmBtn = card.querySelector(".remove-btn");
-      rmBtn.style.display = cards.length === 1 ? "none" : "inline-block";
-    });
-  }
-
-  function addAlgorithm2Survey(preset = {}) {
-    if (getAlg2Cards().length >= MAX_SEGMENTS) return;
-    const id = ++alg2Counter;
-
-    const card = document.createElement("div");
-    card.className = "segment-card";
-    card.dataset.alg2Id = id;
-
-    card.innerHTML = `
-      <div class="segment-card-header">
-        <span class="segment-title"><span class="seg-index"></span></span>
-        <button type="button" class="remove-btn" title="이 설문 삭제">✕</button>
-      </div>
-
-      <div class="seg-selectors">
-        <div class="seg-group">
-          <span class="seg-group-label">시나리오</span>
-          <div class="seg-control">
-            ${[1,2,3].map(n => `
-              <input type="radio" name="alg2${id}_scenario" id="alg2${id}_sc${n}" value="${n}" ${n === 3 ? "checked" : ""} disabled />
-              <label for="alg2${id}_sc${n}">${n}</label>
-            `).join("")}
-          </div>
-        </div>
-        <div class="seg-group">
-          <span class="seg-group-label">단계</span>
-          <div class="seg-control">
-            <input type="radio" name="alg2${id}_stage" id="alg2${id}_before" value="적용 전" ${preset.stage === "적용 전" ? "checked" : ""} />
-            <label for="alg2${id}_before">적용 전</label>
-            <input type="radio" name="alg2${id}_stage" id="alg2${id}_after" value="적용 후" ${preset.stage === "적용 후" ? "checked" : ""} />
-            <label for="alg2${id}_after">적용 후</label>
-          </div>
-        </div>
-      </div>
-
-      ${ALGORITHM2_QUESTIONS.map((q, qi) => `
-        <div class="question-block">
-          <div class="question-label">
-            <span class="question-num">Q${qi + 1}</span>${q.text}
-          </div>
-          <div class="likert">
-            ${renderLikertOptions(`alg2${id}_${q.key}`, `alg2${id}_${q.key}`)}
-          </div>
-        </div>
-      `).join("")}
-
-      <div class="comment-block">
-        <label for="alg2${id}_comment">자유 의견 (선택)</label>
-        <textarea id="alg2${id}_comment" name="alg2${id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
-      </div>
-    `;
-
-    card.querySelector(".remove-btn").addEventListener("click", () => {
-      const allCards = getAlg2Cards();
-      const idx = allCards.indexOf(card);
-      card.remove();
-      updateAlg2Headers();
-      updateAlg2AddBtn();
-      showAlg2Page(Math.min(idx, getAlg2Cards().length - 1));
-    });
-
-    algorithm2List.appendChild(card);
-    updateAlg2Headers();
-    updateAlg2AddBtn();
-    showAlg2Page(getAlg2Cards().length - 1);
-  }
-
-  addSegmentBtn.addEventListener("click", () => addSegment());
-  document.getElementById("prevSegBtn").addEventListener("click", () => showPage(currentSegIdx - 1));
-  document.getElementById("nextSegBtn").addEventListener("click", () => showPage(currentSegIdx + 1));
-
-  addAlg2SurveyBtn.addEventListener("click", () => addAlgorithm2Survey());
-  document.getElementById("prevAlg2Btn").addEventListener("click", () => showAlg2Page(currentAlg2Idx - 1));
-  document.getElementById("nextAlg2Btn").addEventListener("click", () => showAlg2Page(currentAlg2Idx + 1));
-
-  // 시나리오 3개 × 적용 전/후 = 6개 미리 생성
-  [1, 2, 3].forEach(sc => ["적용 전", "적용 후"].forEach(stage => addSegment({ scenario: sc, stage })));
-  showPage(0);
-
-  // 시나리오 3 × 적용 전/후 = 2개 미리 생성
-  ALGORITHM2_INITIAL_SURVEYS.forEach(survey => addAlgorithm2Survey(survey));
-  showAlg2Page(0);
+  renderScenarioSections();
 
   // 미응답 경고 처리
   document.getElementById("warnConfirm").addEventListener("click", () => {
@@ -1125,64 +994,24 @@
     hideError();
 
     const participantInfo = getParticipantInfo();
-    if (!participantInfo.participantName) { showError("참가자 이름을 입력해 주세요."); return; }
-    if (!participantInfo.participantBirthDate) { showError("참가자 생년월일을 입력해 주세요."); return; }
-    if (!participantInfo.participantGender) { showError("참가자 성별을 선택해 주세요."); return; }
+    if (!participantInfo.participantId) { showError("참가자 ID를 입력해 주세요."); return; }
+    if (!participantInfo.participantBirthYear) { showError("생년을 입력해 주세요."); return; }
+    if (!participantInfo.participantGender) { showError("성별을 선택해 주세요."); return; }
 
-    const cards = getCards();
-    const alg2Cards = getAlg2Cards();
-
-    for (const card of cards) {
-      const id = card.dataset.segId;
-      const scenario = document.querySelector(`input[name="seg${id}_scenario"]:checked`);
-      const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`);
-      if (!scenario || !stage) {
-        showError("모든 설문에서 시나리오와 단계를 선택해 주세요.");
-        showPage(cards.indexOf(card));
-        return;
-      }
-    }
-
-    for (const card of alg2Cards) {
-      const id = card.dataset.alg2Id;
-      const stage = document.querySelector(`input[name="alg2${id}_stage"]:checked`);
-      if (!stage) {
-        showError("모든 설문에서 시나리오와 단계를 선택해 주세요.");
-        showAlg2Page(alg2Cards.indexOf(card));
-        return;
-      }
-    }
-
-    // Q 미응답 체크
-    let unansweredCard = null;
-    for (const card of cards) {
-      const id = card.dataset.segId;
-      for (const q of QUESTIONS) {
-        if (!document.querySelector(`input[name="seg${id}_${q.key}"]:checked`)) {
-          unansweredCard = card; break;
+    let unansweredSurvey = null;
+    for (const survey of FIXED_SURVEYS) {
+      for (const q of QUESTION_SETS[survey.questionSet]) {
+        if (!document.querySelector(`input[name="survey${survey.id}_${q.key}"]:checked`)) {
+          unansweredSurvey = survey;
+          break;
         }
       }
-      if (unansweredCard) break;
+      if (unansweredSurvey) break;
     }
 
-    let unansweredAlg2Card = null;
-    for (const card of alg2Cards) {
-      const id = card.dataset.alg2Id;
-      for (const q of ALGORITHM2_QUESTIONS) {
-        if (!document.querySelector(`input[name="alg2${id}_${q.key}"]:checked`)) {
-          unansweredAlg2Card = card; break;
-        }
-      }
-      if (unansweredAlg2Card) break;
-    }
-
-    if (unansweredCard || unansweredAlg2Card) {
+    if (unansweredSurvey) {
       warnBanner.style.display = "block";
-      if (unansweredCard) {
-        showPage(cards.indexOf(unansweredCard));
-      } else {
-        showAlg2Page(alg2Cards.indexOf(unansweredAlg2Card));
-      }
+      showScenarioPage(unansweredSurvey.scenario, getSurveysByScenario(unansweredSurvey.scenario).indexOf(unansweredSurvey));
       return;
     }
 
@@ -1192,58 +1021,36 @@
   async function doSubmit() {
     const participantInfo = getParticipantInfo();
     const timestamp = new Date().toISOString();
-    const cards = getCards();
-    const alg2Cards = getAlg2Cards();
 
-    const records = [];
-    for (const [index, card] of cards.entries()) {
-      const id = card.dataset.segId;
-      const scenario = parseInt(document.querySelector(`input[name="seg${id}_scenario"]:checked`).value);
-      const stage    = document.querySelector(`input[name="seg${id}_stage"]:checked`).value;
+    const records = FIXED_SURVEYS.map((survey, index) => {
       const entry = {
         ...participantInfo,
-        algorithm: "알고리즘 1",
+        algorithm: survey.algorithm,
         surveyNumber: index + 1,
-        scenario,
-        stage,
+        scenario: survey.scenario,
+        stage: survey.stage,
         timestamp,
       };
-      for (const q of QUESTIONS) {
-        const checked = document.querySelector(`input[name="seg${id}_${q.key}"]:checked`);
+
+      for (const q of QUESTION_SETS[survey.questionSet]) {
+        const checked = document.querySelector(`input[name="survey${survey.id}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
       }
-      if (entry.q2 !== null && entry.q2 >= 2) {
-        const envChecked = [...card.querySelectorAll(`input[name="seg${id}_q2env"]:checked`)].map(el => el.value);
-        const envOther = (document.getElementById(`seg${id}_q2env_other`)?.value || "").trim();
+
+      if (survey.questionSet === "algorithm1" && entry.q2 !== null && entry.q2 >= 2) {
+        const card = getSurveyCard(survey.id);
+        const envChecked = [...card.querySelectorAll(`input[name="survey${survey.id}_q2env"]:checked`)].map(el => el.value);
+        const envOther = (document.getElementById(`survey${survey.id}_q2env_other`)?.value || "").trim();
         entry.q2_env = envChecked.join(", ") || null;
         entry.q2_env_other = envOther || null;
       } else {
         entry.q2_env = null;
         entry.q2_env_other = null;
       }
-      entry.comment = (card.querySelector(`textarea[name="seg${id}_comment"]`).value || "").trim();
-      records.push(entry);
-    }
-
-    for (const [index, card] of alg2Cards.entries()) {
-      const id = card.dataset.alg2Id;
-      const scenario = parseInt(document.querySelector(`input[name="alg2${id}_scenario"]:checked`).value);
-      const stage = document.querySelector(`input[name="alg2${id}_stage"]:checked`).value;
-      records.push({
-        ...participantInfo,
-        algorithm: "알고리즘 2",
-        surveyNumber: index + 1,
-        scenario,
-        stage,
-        timestamp,
-        q1: getQuestionValue(`alg2${id}_q1`),
-        q2: getQuestionValue(`alg2${id}_q2`),
-        q3: null,
-        q2_env: null,
-        q2_env_other: null,
-        comment: (document.getElementById(`alg2${id}_comment`).value || "").trim(),
-      });
-    }
+      entry.q3 = entry.q3 ?? null;
+      entry.comment = (document.getElementById(`survey${survey.id}_comment`).value || "").trim();
+      return entry;
+    });
 
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
