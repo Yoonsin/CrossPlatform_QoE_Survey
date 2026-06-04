@@ -764,6 +764,7 @@
       { key: "q1", text: "나의 사격에 대한 입력 반응 전반이 느리거나 부자연스럽게 느껴졌다." },
       { key: "q2", text: "상대가 나보다 유리한 환경이라고 느껴졌다." },
       { key: "q3", text: "결과가 내 실력에 비해 잘 안 나온 것 같다고 느껴졌다." },
+      { key: "q4", text: "상대와의 점수 차이를 따라잡기 어렵다고 느껴졌다." },
     ],
     algorithm2: [
       { key: "q1", text: "오브젝트의 이동이 끊김 없이 부드럽고 자연스럽게 보였다." },
@@ -1048,6 +1049,7 @@
         entry.q2_env_other = null;
       }
       entry.q3 = entry.q3 ?? null;
+      entry.q4 = entry.q4 ?? null;
       entry.comment = (document.getElementById(`survey${survey.id}_comment`).value || "").trim();
       return entry;
     });
