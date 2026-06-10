@@ -664,7 +664,7 @@
     <div class="guide-section">
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
-        <li><strong>참가자 ID, 생년, 성별</strong>을 먼저 입력해 주세요.</li>
+        <li><strong>참가자 이름, 생년, 성별</strong>을 먼저 입력해 주세요.</li>
         <li>시나리오별로 고정된 설문을 순서대로 응답해 주세요.</li>
         <li>각 설문마다 <strong>시나리오 번호</strong>, <strong>알고리즘</strong>, <strong>단계 (적용 전/후)</strong>가 표시되어 있습니다.</li>
         <li>각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
@@ -706,8 +706,8 @@
     <div class="id-section">
       <div class="participant-grid">
         <div class="participant-field">
-          <label for="participantId">참가자 ID</label>
-          <input type="text" id="participantId" placeholder="예: P001" autocomplete="off" />
+          <label for="participantName">참가자 이름</label>
+          <input type="text" id="participantName" placeholder="예: 김이름" autocomplete="name" />
         </div>
         <div class="participant-field">
           <label for="participantBirthYear">생년</label>
@@ -778,8 +778,9 @@
     { id: 3, scenario: 2, algorithm: "알고리즘 1,2", stage: "적용 전", questionSet: "algorithm1", label: "알고리즘 1,2 적용 전" },
     { id: 4, scenario: 2, algorithm: "알고리즘 1", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 1 적용 후" },
     { id: 5, scenario: 2, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 2 적용 후" },
-    { id: 6, scenario: 3, algorithm: "알고리즘 2", stage: "적용 전", questionSet: "algorithm2", label: "알고리즘 2 적용 전" },
-    { id: 7, scenario: 3, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm2", label: "알고리즘 2 적용 후" },
+    { id: 6, scenario: 2, algorithm: "알고리즘 1,2", stage: "적용 후", questionSet: "algorithm1", label: "알고리즘 1,2 적용 후" },
+    { id: 7, scenario: 3, algorithm: "알고리즘 2", stage: "적용 전", questionSet: "algorithm2", label: "알고리즘 2 적용 전" },
+    { id: 8, scenario: 3, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm2", label: "알고리즘 2 적용 후" },
   ];
 
   const scenarioState = { 1: 0, 2: 0, 3: 0 };
@@ -791,7 +792,7 @@
 
   function getParticipantInfo() {
     return {
-      participantId: document.getElementById("participantId").value.trim(),
+      participantName: document.getElementById("participantName").value.trim(),
       participantBirthYear: document.getElementById("participantBirthYear").value.trim(),
       participantGender: document.getElementById("participantGender").value,
     };
@@ -995,7 +996,7 @@
     hideError();
 
     const participantInfo = getParticipantInfo();
-    if (!participantInfo.participantId) { showError("참가자 ID를 입력해 주세요."); return; }
+    if (!participantInfo.participantName) { showError("참가자 이름을 입력해 주세요."); return; }
     if (!participantInfo.participantBirthYear) { showError("생년을 입력해 주세요."); return; }
     if (!participantInfo.participantGender) { showError("성별을 선택해 주세요."); return; }
 

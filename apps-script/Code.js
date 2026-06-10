@@ -5,7 +5,7 @@
 
 const HEADERS = [
   "타임스탬프",
-  "참가자 ID",
+  "참가자 이름",
   "생년",
   "성별",
   "알고리즘",
@@ -37,7 +37,7 @@ function ensureHeaders(sheet) {
 function recordToRow(r) {
   return [
     r.timestamp || new Date().toISOString(),
-    r.participantId || r.participantName || r.userId || "",
+    r.participantName || r.participantId || r.userId || "",
     r.participantBirthYear || r.participantBirthDate || "",
     r.participantGender || "",
     r.algorithm || "알고리즘 1",
