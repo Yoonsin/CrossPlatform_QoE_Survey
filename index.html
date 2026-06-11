@@ -509,6 +509,89 @@
       color: #4a5568;
     }
 
+    .platform-page {
+      display: none;
+    }
+
+    .platform-page.active {
+      display: block;
+    }
+
+    .platform-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 16px 18px;
+      border: 1.5px solid #c3d0e8;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .platform-kicker {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .platform-heading h2 {
+      font-size: 1.08rem;
+      color: #1a202c;
+      line-height: 1.35;
+    }
+
+    .platform-page-count {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #667eea;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .platform-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 4px 0 14px;
+    }
+
+    .platform-nav-btn {
+      min-width: 104px;
+      padding: 10px 22px;
+      border: 2px solid #c3d0e8;
+      border-radius: 10px;
+      background: #fff;
+      color: #4a5568;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+
+    .platform-nav-btn:hover:not(:disabled) {
+      background: #ebf4ff;
+      border-color: #667eea;
+      color: #667eea;
+    }
+
+    .platform-nav-btn:disabled {
+      color: #c0cad8;
+      border-color: #e8edf2;
+      cursor: default;
+    }
+
+    .platform-page-indicator {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #718096;
+    }
+
     .seg-control input[type="radio"]:disabled + label {
       cursor: default;
     }
@@ -642,6 +725,8 @@
     @media (max-width: 540px) {
       .card { padding: 28px 16px; }
       .participant-grid { grid-template-columns: 1fr; }
+      .platform-heading { align-items: flex-start; flex-direction: column; }
+      .platform-page-count { align-self: flex-start; }
       .segment-card { padding: 18px 16px; }
       .seg-selectors { flex-direction: column; gap: 14px; }
       .likert { gap: 4px; }
@@ -665,7 +750,7 @@
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
         <li><strong>참가자 이름, 생년, 성별</strong>을 먼저 입력해 주세요.</li>
-        <li>시나리오별로 고정된 설문을 순서대로 응답해 주세요.</li>
+        <li>Mobile 플랫폼 설문을 먼저 응답하고, PC 플랫폼 설문은 <strong>다음</strong> 버튼으로 이동해 응답해 주세요.</li>
         <li>각 설문마다 <strong>시나리오 번호</strong>, <strong>알고리즘</strong>, <strong>단계 (적용 전/후)</strong>가 표시되어 있습니다.</li>
         <li>각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
         <li>자유 의견란은 선택 사항입니다. 느낀 점을 자유롭게 작성하셔도 됩니다.</li>
@@ -695,7 +780,7 @@
         <li><strong>시나리오 3</strong></li>
         <li>시나리오 3에서는 표적이 화면 안의 고정된 위치에 스폰되며, 고정된 속도로 좌우로 움직입니다.</li>
         <li>플레이어는 화면을 관찰하기만 하면 됩니다.</li>
-        <li>게임이 시작되면 화면 왼쪽 위에 <strong>제한시간 30초</strong> 타이머가 나타나며 제한시간이 지나면 게임이 종료됩니다. </li>
+        <li>게임이 시작되면 화면 왼쪽 위에 <strong>제한시간 20초</strong> 타이머가 나타나며 제한시간이 지나면 게임이 종료됩니다. </li>
         <br>
       </ul>
     </div>
@@ -730,9 +815,15 @@
 
     <div id="scenarioSurveySections"></div>
 
+    <div class="platform-nav">
+      <button type="button" class="platform-nav-btn" id="prevPlatformBtn">← 이전</button>
+      <span class="platform-page-indicator" id="platformPageIndicator">1 / 2</span>
+      <button type="button" class="platform-nav-btn" id="nextPlatformBtn">다음 →</button>
+    </div>
+
     <!-- 경고 배너 -->
     <div class="warn-banner" id="warnBanner">
-      ⚠️ 일부 문항에 응답하지 않은 설문이 있습니다. 그래도 제출하시겠습니까?
+      <span id="warnMessage">⚠️ 일부 문항에 응답하지 않은 설문이 있습니다. 그래도 제출하시겠습니까?</span>
       <div class="warn-actions">
         <button type="button" class="warn-confirm-btn" id="warnConfirm">그래도 제출</button>
         <button type="button" class="warn-cancel-btn" id="warnCancel">돌아가기</button>
@@ -783,12 +874,28 @@
     { id: 8, scenario: 3, algorithm: "알고리즘 2", stage: "적용 후", questionSet: "algorithm2", label: "알고리즘 2 적용 후" },
   ];
 
-  const scenarioState = { 1: 0, 2: 0, 3: 0 };
+  const PLATFORMS = [
+    { id: 1, key: "mobile", platform: "Mobile", title: "Mobile 플랫폼 설문" },
+    { id: 2, key: "pc", platform: "PC", title: "PC 플랫폼 설문" },
+  ];
+
+  const platformScenarioState = PLATFORMS.reduce((acc, platform) => {
+    acc[platform.key] = { 1: 0, 2: 0, 3: 0 };
+    return acc;
+  }, {});
+  let activePlatformIndex = 0;
+  let pendingSubmitPlatforms = null;
+
   const scenarioSurveySections = document.getElementById("scenarioSurveySections");
+  const prevPlatformBtn = document.getElementById("prevPlatformBtn");
+  const nextPlatformBtn = document.getElementById("nextPlatformBtn");
+  const platformPageIndicator = document.getElementById("platformPageIndicator");
   const submitBtn = document.getElementById("submitBtn");
   const successMsg = document.getElementById("successMsg");
   const errorMsg = document.getElementById("errorMsg");
   const warnBanner = document.getElementById("warnBanner");
+  const warnMessage = document.getElementById("warnMessage");
+  const warnConfirm = document.getElementById("warnConfirm");
 
   function getParticipantInfo() {
     return {
@@ -819,52 +926,72 @@
     return FIXED_SURVEYS.filter(survey => survey.scenario === scenario);
   }
 
-  function getSurveyCard(surveyId) {
-    return document.querySelector(`[data-survey-id="${surveyId}"]`);
+  function getPlatformPrefix(platformKey, surveyId) {
+    return `${platformKey}_survey${surveyId}`;
   }
 
-  function renderScenarioSections() {
-    scenarioSurveySections.innerHTML = [1, 2, 3].map((scenario, index) => `
-      ${index > 0 ? `<hr class="divider" />` : ""}
-      <section class="scenario-survey-section" data-scenario-section="${scenario}">
-        <div class="survey-section-heading">
-          <h2>시나리오 ${scenario} 설문</h2>
+  function getSurveyCard(platformKey, surveyId) {
+    return document.querySelector(`[data-platform-key="${platformKey}"][data-survey-id="${surveyId}"]`);
+  }
+
+  function renderPlatformSections() {
+    scenarioSurveySections.innerHTML = PLATFORMS.map((platform, platformIndex) => `
+      <section class="platform-page${platformIndex === activePlatformIndex ? " active" : ""}" data-platform-section="${platform.key}">
+        <div class="platform-heading">
+          <div>
+            <span class="platform-kicker">플랫폼 설문 ${platform.id}</span>
+            <h2>${platform.title}</h2>
+          </div>
+          <span class="platform-page-count">${platformIndex + 1} / ${PLATFORMS.length}</span>
         </div>
 
-        <div class="seg-tabs-wrap">
-          <div class="seg-tabs" id="scenario${scenario}Tabs"></div>
-        </div>
+        ${[1, 2, 3].map((scenario, index) => `
+          ${index > 0 ? `<hr class="divider" />` : ""}
+          <section class="scenario-survey-section" data-platform-key="${platform.key}" data-scenario-section="${scenario}">
+            <div class="survey-section-heading">
+              <h2>시나리오 ${scenario} 설문</h2>
+            </div>
 
-        <div id="scenario${scenario}SurveyList">
-          ${getSurveysByScenario(scenario).map(renderSurveyCard).join("")}
-        </div>
+            <div class="seg-tabs-wrap">
+              <div class="seg-tabs" id="${platform.key}_scenario${scenario}Tabs"></div>
+            </div>
 
-        <div class="seg-nav">
-          <button type="button" class="seg-nav-btn" id="prevScenario${scenario}Btn">← 이전</button>
-          <span class="seg-page-indicator" id="scenario${scenario}PageIndicator">1 / 1</span>
-          <button type="button" class="seg-nav-btn" id="nextScenario${scenario}Btn">다음 →</button>
-        </div>
+            <div id="${platform.key}_scenario${scenario}SurveyList">
+              ${getSurveysByScenario(scenario).map(survey => renderSurveyCard(platform, survey)).join("")}
+            </div>
+
+            <div class="seg-nav">
+              <button type="button" class="seg-nav-btn" id="${platform.key}_prevScenario${scenario}Btn">← 이전</button>
+              <span class="seg-page-indicator" id="${platform.key}_scenario${scenario}PageIndicator">1 / 1</span>
+              <button type="button" class="seg-nav-btn" id="${platform.key}_nextScenario${scenario}Btn">다음 →</button>
+            </div>
+          </section>
+        `).join("")}
       </section>
     `).join("");
 
-    [1, 2, 3].forEach(scenario => {
-      document.getElementById(`prevScenario${scenario}Btn`).addEventListener("click", () => {
-        showScenarioPage(scenario, scenarioState[scenario] - 1);
+    PLATFORMS.forEach(platform => {
+      [1, 2, 3].forEach(scenario => {
+        document.getElementById(`${platform.key}_prevScenario${scenario}Btn`).addEventListener("click", () => {
+          showScenarioPage(platform.key, scenario, platformScenarioState[platform.key][scenario] - 1);
+        });
+        document.getElementById(`${platform.key}_nextScenario${scenario}Btn`).addEventListener("click", () => {
+          showScenarioPage(platform.key, scenario, platformScenarioState[platform.key][scenario] + 1);
+        });
+        renderScenarioTabs(platform.key, scenario);
+        showScenarioPage(platform.key, scenario, 0);
       });
-      document.getElementById(`nextScenario${scenario}Btn`).addEventListener("click", () => {
-        showScenarioPage(scenario, scenarioState[scenario] + 1);
-      });
-      renderScenarioTabs(scenario);
-      showScenarioPage(scenario, 0);
     });
 
     attachQuestionHandlers();
+    showPlatformPage(activePlatformIndex);
   }
 
-  function renderSurveyCard(survey) {
+  function renderSurveyCard(platform, survey) {
+    const prefix = getPlatformPrefix(platform.key, survey.id);
     const questions = QUESTION_SETS[survey.questionSet];
     return `
-      <div class="segment-card" data-survey-id="${survey.id}" data-scenario="${survey.scenario}" data-question-set="${survey.questionSet}">
+      <div class="segment-card" data-platform-key="${platform.key}" data-survey-id="${survey.id}" data-scenario="${survey.scenario}" data-question-set="${survey.questionSet}">
         <div class="segment-card-header">
           <span class="segment-title">
             <span class="seg-index">설문 ${survey.id}</span>
@@ -877,25 +1004,25 @@
             <span class="seg-group-label">시나리오</span>
             <div class="seg-control">
               ${[1,2,3].map(n => `
-                <input type="radio" name="survey${survey.id}_scenario" id="survey${survey.id}_sc${n}" value="${n}" ${survey.scenario === n ? "checked" : ""} disabled />
-                <label for="survey${survey.id}_sc${n}">${n}</label>
+                <input type="radio" name="${prefix}_scenario" id="${prefix}_sc${n}" value="${n}" ${survey.scenario === n ? "checked" : ""} disabled />
+                <label for="${prefix}_sc${n}">${n}</label>
               `).join("")}
             </div>
           </div>
           <div class="seg-group">
             <span class="seg-group-label">알고리즘</span>
             <div class="seg-control">
-              <input type="radio" name="survey${survey.id}_algorithm" id="survey${survey.id}_algorithm" value="${survey.algorithm}" checked disabled />
-              <label for="survey${survey.id}_algorithm">${survey.algorithm}</label>
+              <input type="radio" name="${prefix}_algorithm" id="${prefix}_algorithm" value="${survey.algorithm}" checked disabled />
+              <label for="${prefix}_algorithm">${survey.algorithm}</label>
             </div>
           </div>
           <div class="seg-group">
             <span class="seg-group-label">단계</span>
             <div class="seg-control">
-              <input type="radio" name="survey${survey.id}_stage" id="survey${survey.id}_before" value="적용 전" ${survey.stage === "적용 전" ? "checked" : ""} disabled />
-              <label for="survey${survey.id}_before">적용 전</label>
-              <input type="radio" name="survey${survey.id}_stage" id="survey${survey.id}_after" value="적용 후" ${survey.stage === "적용 후" ? "checked" : ""} disabled />
-              <label for="survey${survey.id}_after">적용 후</label>
+              <input type="radio" name="${prefix}_stage" id="${prefix}_before" value="적용 전" ${survey.stage === "적용 전" ? "checked" : ""} disabled />
+              <label for="${prefix}_before">적용 전</label>
+              <input type="radio" name="${prefix}_stage" id="${prefix}_after" value="적용 후" ${survey.stage === "적용 후" ? "checked" : ""} disabled />
+              <label for="${prefix}_after">적용 후</label>
             </div>
           </div>
         </div>
@@ -906,25 +1033,25 @@
               <span class="question-num">Q${qi + 1}</span>${q.text}
             </div>
             <div class="likert">
-              ${renderLikertOptions(`survey${survey.id}_${q.key}`, `survey${survey.id}_${q.key}`)}
+              ${renderLikertOptions(`${prefix}_${q.key}`, `${prefix}_${q.key}`)}
             </div>
             ${survey.questionSet === "algorithm1" && q.key === "q2" ? `
-            <div class="q2-followup" id="survey${survey.id}_q2followup">
+            <div class="q2-followup" id="${prefix}_q2followup">
               <div class="q2-followup-label">
                 <span class="question-num">Q2-1</span>
                 어떤 환경 격차 때문인 것 같은지 생각하는 항목을 모두 선택해 주세요.
               </div>
               <div class="q2-checkbox-group">
                 <div class="q2-checkbox-option">
-                  <input type="checkbox" name="survey${survey.id}_q2env" id="survey${survey.id}_q2env_platform" value="플랫폼" />
-                  <label for="survey${survey.id}_q2env_platform">플랫폼</label>
+                  <input type="checkbox" name="${prefix}_q2env" id="${prefix}_q2env_platform" value="플랫폼" />
+                  <label for="${prefix}_q2env_platform">플랫폼</label>
                 </div>
                 <div class="q2-checkbox-option">
-                  <input type="checkbox" name="survey${survey.id}_q2env" id="survey${survey.id}_q2env_network" value="네트워크" />
-                  <label for="survey${survey.id}_q2env_network">네트워크</label>
+                  <input type="checkbox" name="${prefix}_q2env" id="${prefix}_q2env_network" value="네트워크" />
+                  <label for="${prefix}_q2env_network">네트워크</label>
                 </div>
               </div>
-              <input type="text" class="q2-other-input" id="survey${survey.id}_q2env_other"
+              <input type="text" class="q2-other-input" id="${prefix}_q2env_other"
                 placeholder="그 외 — 직접 입력 (선택)" />
             </div>
             ` : ""}
@@ -932,67 +1059,155 @@
         `).join("")}
 
         <div class="comment-block">
-          <label for="survey${survey.id}_comment">자유 의견 (선택)</label>
-          <textarea id="survey${survey.id}_comment" name="survey${survey.id}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
+          <label for="${prefix}_comment">자유 의견 (선택)</label>
+          <textarea id="${prefix}_comment" name="${prefix}_comment" placeholder="이 설문에 대한 의견이나 느낀 점을 자유롭게 작성해 주세요."></textarea>
         </div>
       </div>
     `;
   }
 
-  function renderScenarioTabs(scenario) {
+  function renderScenarioTabs(platformKey, scenario) {
     const surveys = getSurveysByScenario(scenario);
-    const tabs = document.getElementById(`scenario${scenario}Tabs`);
+    const tabs = document.getElementById(`${platformKey}_scenario${scenario}Tabs`);
+    const scenarioState = platformScenarioState[platformKey];
     tabs.innerHTML = surveys.map((survey, i) => `
-      <button type="button" class="seg-tab${i === scenarioState[scenario] ? " active" : ""}" data-scenario="${scenario}" data-idx="${i}">
+      <button type="button" class="seg-tab${i === scenarioState[scenario] ? " active" : ""}" data-platform-key="${platformKey}" data-scenario="${scenario}" data-idx="${i}">
         ${survey.label}
       </button>
     `).join("");
     tabs.querySelectorAll(".seg-tab").forEach(btn => {
-      btn.addEventListener("click", () => showScenarioPage(parseInt(btn.dataset.scenario), parseInt(btn.dataset.idx)));
+      btn.addEventListener("click", () => showScenarioPage(btn.dataset.platformKey, parseInt(btn.dataset.scenario), parseInt(btn.dataset.idx)));
     });
   }
 
-  function showScenarioPage(scenario, idx) {
+  function showScenarioPage(platformKey, scenario, idx) {
     const surveys = getSurveysByScenario(scenario);
     const nextIdx = Math.max(0, Math.min(idx, surveys.length - 1));
-    scenarioState[scenario] = nextIdx;
+    platformScenarioState[platformKey][scenario] = nextIdx;
 
     surveys.forEach((survey, i) => {
-      getSurveyCard(survey.id).classList.toggle("active", i === nextIdx);
+      getSurveyCard(platformKey, survey.id).classList.toggle("active", i === nextIdx);
     });
 
-    renderScenarioTabs(scenario);
-    document.getElementById(`scenario${scenario}PageIndicator`).textContent = `${nextIdx + 1} / ${surveys.length}`;
-    document.getElementById(`prevScenario${scenario}Btn`).disabled = nextIdx === 0;
-    document.getElementById(`nextScenario${scenario}Btn`).disabled = nextIdx >= surveys.length - 1;
+    renderScenarioTabs(platformKey, scenario);
+    document.getElementById(`${platformKey}_scenario${scenario}PageIndicator`).textContent = `${nextIdx + 1} / ${surveys.length}`;
+    document.getElementById(`${platformKey}_prevScenario${scenario}Btn`).disabled = nextIdx === 0;
+    document.getElementById(`${platformKey}_nextScenario${scenario}Btn`).disabled = nextIdx >= surveys.length - 1;
+  }
+
+  function showPlatformPage(index, shouldScroll = false) {
+    activePlatformIndex = Math.max(0, Math.min(index, PLATFORMS.length - 1));
+    document.querySelectorAll(".platform-page").forEach((page, pageIndex) => {
+      page.classList.toggle("active", pageIndex === activePlatformIndex);
+    });
+    platformPageIndicator.textContent = `${activePlatformIndex + 1} / ${PLATFORMS.length}`;
+    prevPlatformBtn.disabled = activePlatformIndex === 0;
+    nextPlatformBtn.disabled = activePlatformIndex >= PLATFORMS.length - 1;
+    prevPlatformBtn.style.visibility = activePlatformIndex === 0 ? "hidden" : "visible";
+    nextPlatformBtn.style.visibility = activePlatformIndex >= PLATFORMS.length - 1 ? "hidden" : "visible";
+
+    if (shouldScroll) {
+      scenarioSurveySections.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function showPlatformPageByKey(platformKey, shouldScroll = false) {
+    const platformIndex = PLATFORMS.findIndex(platform => platform.key === platformKey);
+    if (platformIndex >= 0) showPlatformPage(platformIndex, shouldScroll);
+  }
+
+  function focusSurvey(platform, survey, shouldScroll = false) {
+    showPlatformPageByKey(platform.key, shouldScroll);
+    showScenarioPage(platform.key, survey.scenario, getSurveysByScenario(survey.scenario).indexOf(survey));
   }
 
   function attachQuestionHandlers() {
-    FIXED_SURVEYS.forEach(survey => {
-      if (survey.questionSet !== "algorithm1") return;
-      document.querySelectorAll(`input[name="survey${survey.id}_q2"]`).forEach(radio => {
-        radio.addEventListener("change", () => {
-          const followup = document.getElementById(`survey${survey.id}_q2followup`);
-          followup.classList.toggle("visible", parseInt(radio.value) >= 2);
+    PLATFORMS.forEach(platform => {
+      FIXED_SURVEYS.forEach(survey => {
+        if (survey.questionSet !== "algorithm1") return;
+        const prefix = getPlatformPrefix(platform.key, survey.id);
+        document.querySelectorAll(`input[name="${prefix}_q2"]`).forEach(radio => {
+          radio.addEventListener("change", () => {
+            const followup = document.getElementById(`${prefix}_q2followup`);
+            followup.classList.toggle("visible", parseInt(radio.value) >= 2);
+          });
         });
       });
     });
   }
 
-  renderScenarioSections();
+  function hasPlatformAnyResponse(platformKey) {
+    return FIXED_SURVEYS.some(survey => {
+      const prefix = getPlatformPrefix(platformKey, survey.id);
+      const hasLikertAnswer = QUESTION_SETS[survey.questionSet].some(q => {
+        return Boolean(document.querySelector(`input[name="${prefix}_${q.key}"]:checked`));
+      });
+      const hasQ2Followup = Boolean(document.querySelector(`input[name="${prefix}_q2env"]:checked`))
+        || Boolean((document.getElementById(`${prefix}_q2env_other`)?.value || "").trim());
+      const hasComment = Boolean((document.getElementById(`${prefix}_comment`)?.value || "").trim());
+      return hasLikertAnswer || hasQ2Followup || hasComment;
+    });
+  }
+
+  function findFirstUnansweredSurvey(platformsToSubmit) {
+    for (const platform of platformsToSubmit) {
+      for (const survey of FIXED_SURVEYS) {
+        const prefix = getPlatformPrefix(platform.key, survey.id);
+        for (const q of QUESTION_SETS[survey.questionSet]) {
+          if (!document.querySelector(`input[name="${prefix}_${q.key}"]:checked`)) {
+            return { platform, survey };
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  function showWarning(message, confirmText, platformsToSubmit, focusTarget = null) {
+    warnMessage.textContent = message;
+    warnConfirm.textContent = confirmText;
+    pendingSubmitPlatforms = platformsToSubmit;
+    warnBanner.style.display = "block";
+
+    if (focusTarget) {
+      focusSurvey(focusTarget.platform, focusTarget.survey);
+    }
+  }
+
+  function hideWarning() {
+    warnBanner.style.display = "none";
+    warnMessage.textContent = "⚠️ 일부 문항에 응답하지 않은 설문이 있습니다. 그래도 제출하시겠습니까?";
+    warnConfirm.textContent = "그래도 제출";
+    pendingSubmitPlatforms = null;
+  }
+
+  prevPlatformBtn.addEventListener("click", () => {
+    hideWarning();
+    hideError();
+    showPlatformPage(activePlatformIndex - 1, true);
+  });
+
+  nextPlatformBtn.addEventListener("click", () => {
+    hideWarning();
+    hideError();
+    showPlatformPage(activePlatformIndex + 1, true);
+  });
+
+  renderPlatformSections();
 
   // 미응답 경고 처리
-  document.getElementById("warnConfirm").addEventListener("click", () => {
-    warnBanner.style.display = "none";
-    doSubmit();
+  warnConfirm.addEventListener("click", () => {
+    const platformsToSubmit = pendingSubmitPlatforms || [PLATFORMS[activePlatformIndex]];
+    hideWarning();
+    doSubmit(platformsToSubmit);
   });
   document.getElementById("warnCancel").addEventListener("click", () => {
-    warnBanner.style.display = "none";
+    hideWarning();
   });
 
   document.getElementById("surveyForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    warnBanner.style.display = "none";
+    hideWarning();
     hideError();
 
     const participantInfo = getParticipantInfo();
@@ -1000,33 +1215,45 @@
     if (!participantInfo.participantBirthYear) { showError("생년을 입력해 주세요."); return; }
     if (!participantInfo.participantGender) { showError("성별을 선택해 주세요."); return; }
 
-    let unansweredSurvey = null;
-    for (const survey of FIXED_SURVEYS) {
-      for (const q of QUESTION_SETS[survey.questionSet]) {
-        if (!document.querySelector(`input[name="survey${survey.id}_${q.key}"]:checked`)) {
-          unansweredSurvey = survey;
-          break;
-        }
-      }
-      if (unansweredSurvey) break;
-    }
+    const mobilePlatform = PLATFORMS[0];
+    const activePlatform = PLATFORMS[activePlatformIndex];
+    const activePlatformBlank = activePlatformIndex > 0 && !hasPlatformAnyResponse(activePlatform.key);
+    const platformsToSubmit = activePlatformBlank
+      ? [mobilePlatform]
+      : PLATFORMS.slice(0, activePlatformIndex + 1);
 
-    if (unansweredSurvey) {
-      warnBanner.style.display = "block";
-      showScenarioPage(unansweredSurvey.scenario, getSurveysByScenario(unansweredSurvey.scenario).indexOf(unansweredSurvey));
+    const unanswered = findFirstUnansweredSurvey(platformsToSubmit);
+    if (unanswered) {
+      showWarning(
+        "⚠️ 일부 문항에 응답하지 않은 설문이 있습니다. 그래도 제출하시겠습니까?",
+        "그래도 제출",
+        platformsToSubmit,
+        unanswered
+      );
       return;
     }
 
-    doSubmit();
+    if (activePlatformBlank) {
+      showWarning(
+        "⚠️ PC 플랫폼 설문 응답이 비어 있습니다. Mobile 플랫폼 설문만 제출하시겠습니까?",
+        "Mobile만 제출",
+        platformsToSubmit
+      );
+      return;
+    }
+
+    doSubmit(platformsToSubmit);
   });
 
-  async function doSubmit() {
+  async function doSubmit(platformsToSubmit) {
     const participantInfo = getParticipantInfo();
     const timestamp = new Date().toISOString();
 
-    const records = FIXED_SURVEYS.map((survey, index) => {
+    const records = platformsToSubmit.flatMap(platform => FIXED_SURVEYS.map((survey, index) => {
+      const prefix = getPlatformPrefix(platform.key, survey.id);
       const entry = {
         ...participantInfo,
+        platform: platform.platform,
         algorithm: survey.algorithm,
         surveyNumber: index + 1,
         scenario: survey.scenario,
@@ -1035,14 +1262,14 @@
       };
 
       for (const q of QUESTION_SETS[survey.questionSet]) {
-        const checked = document.querySelector(`input[name="survey${survey.id}_${q.key}"]:checked`);
+        const checked = document.querySelector(`input[name="${prefix}_${q.key}"]:checked`);
         entry[q.key] = checked ? parseInt(checked.value) : null;
       }
 
       if (survey.questionSet === "algorithm1" && entry.q2 !== null && entry.q2 >= 2) {
-        const card = getSurveyCard(survey.id);
-        const envChecked = [...card.querySelectorAll(`input[name="survey${survey.id}_q2env"]:checked`)].map(el => el.value);
-        const envOther = (document.getElementById(`survey${survey.id}_q2env_other`)?.value || "").trim();
+        const card = getSurveyCard(platform.key, survey.id);
+        const envChecked = [...card.querySelectorAll(`input[name="${prefix}_q2env"]:checked`)].map(el => el.value);
+        const envOther = (document.getElementById(`${prefix}_q2env_other`)?.value || "").trim();
         entry.q2_env = envChecked.join(", ") || null;
         entry.q2_env_other = envOther || null;
       } else {
@@ -1051,9 +1278,9 @@
       }
       entry.q3 = entry.q3 ?? null;
       entry.q4 = entry.q4 ?? null;
-      entry.comment = (document.getElementById(`survey${survey.id}_comment`).value || "").trim();
+      entry.comment = (document.getElementById(`${prefix}_comment`).value || "").trim();
       return entry;
-    });
+    }));
 
     submitBtn.disabled = true;
     submitBtn.textContent = "제출 중...";
