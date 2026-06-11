@@ -47,7 +47,7 @@
     .id-section { margin-bottom: 28px; }
     .participant-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
     }
     .id-section label {
@@ -750,11 +750,13 @@
       <div class="guide-section-title">📋 설문 참여 안내</div>
       <ol>
         <li><strong>참가자 이름, 생년, 성별</strong>을 먼저 입력해 주세요.</li>
+        <li>전화번호는 선택 입력 항목입니다. <strong>단, 기프티콘 수령을 원하시면 반드시 입력해야 하며, 개인정보는 기프티콘 발송 후 삭제 처리됩니다.</strong></li>
         <li>Mobile 플랫폼 설문을 먼저 응답하고, PC 플랫폼 설문은 <strong>다음</strong> 버튼으로 이동해 응답해 주세요.</li>
         <li>각 설문마다 <strong>시나리오 번호</strong>, <strong>알고리즘</strong>, <strong>단계 (적용 전/후)</strong>가 표시되어 있습니다.</li>
         <li>각 문항에서 본인의 경험과 가장 가까운 <strong>점수 (1~5)</strong>를 선택해 주세요.</li>
         <li>자유 의견란은 선택 사항입니다. 느낀 점을 자유롭게 작성하셔도 됩니다.</li>
         <li>모든 시나리오 설문 응답 완료 후 하단의 <strong>제출하기</strong> 버튼을 눌러 주세요.</li>
+        <li>필요하시다면 게임 전 <strong>마우스 또는 터치 감도를 조정하실 수 있습니다.</strong></li>
       </ol>
     </div>
 
@@ -807,6 +809,10 @@
             <option value="기타">기타</option>
             <option value="응답하지 않음">응답하지 않음</option>
           </select>
+        </div>
+        <div class="participant-field">
+          <label for="participantPhone">전화번호 (선택)</label>
+          <input type="tel" id="participantPhone" placeholder="예: 010-1234-5678" inputmode="tel" autocomplete="tel" />
         </div>
       </div>
     </div>
@@ -902,6 +908,7 @@
       participantName: document.getElementById("participantName").value.trim(),
       participantBirthYear: document.getElementById("participantBirthYear").value.trim(),
       participantGender: document.getElementById("participantGender").value,
+      participantPhone: document.getElementById("participantPhone").value.trim(),
     };
   }
 

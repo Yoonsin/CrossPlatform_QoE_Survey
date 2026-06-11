@@ -8,6 +8,7 @@ const HEADERS = [
   "참가자 이름",
   "생년",
   "성별",
+  "전화번호",
   "플랫폼",
   "알고리즘",
   "설문 번호",
@@ -28,7 +29,24 @@ function ensureHeaders(sheet) {
     return;
   }
 
-  const currentHeaders = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  const currentWidth = Math.max(sheet.getLastColumn(), HEADERS.length);
+  let currentHeaders = sheet.getRange(1, 1, 1, currentWidth).getValues()[0];
+
+  if (!currentHeaders.includes("전화번호")) {
+    const platformIndex = currentHeaders.indexOf("플랫폼");
+    const algorithmIndex = currentHeaders.indexOf("알고리즘");
+    const insertIndex = platformIndex >= 0 ? platformIndex : algorithmIndex;
+
+    if (insertIndex >= 0) {
+      sheet.insertColumnBefore(insertIndex + 1);
+    } else {
+      sheet.insertColumnAfter(sheet.getLastColumn());
+    }
+
+    const nextWidth = Math.max(sheet.getLastColumn(), HEADERS.length);
+    currentHeaders = sheet.getRange(1, 1, 1, nextWidth).getValues()[0];
+  }
+
   const needsHeaderUpdate = HEADERS.some((header, index) => currentHeaders[index] !== header);
   if (needsHeaderUpdate) {
     sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
@@ -41,6 +59,7 @@ function recordToRow(r) {
     r.participantName || r.participantId || r.userId || "",
     r.participantBirthYear || r.participantBirthDate || "",
     r.participantGender || "",
+    r.participantPhone || r.phone || "",
     r.platform || "",
     r.algorithm || "알고리즘 1",
     r.surveyNumber || "",
